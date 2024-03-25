@@ -1,5 +1,6 @@
 import React from "react"
 import styles from './NavBar.module.css'
+import {NavLink} from "react-router-dom";
 
 function NavBar() {
 
@@ -11,7 +12,7 @@ function NavBar() {
         },
         {
             id: 2,
-            path: "/user",
+            path: "/users",
             text: "User"
         }
     ]
@@ -21,10 +22,12 @@ function NavBar() {
             <ul>
                 {links.map(link => {
                     return (
-                        <li key={link.id}>
-                            {/* Add NavLink here */}
+                        // eslint-disable-next-line react/jsx-key
+                        <NavLink to={link.path}>
+
                             {link.text}
-                        </li>
+
+                        </NavLink>
                     )
                 })}
             </ul>

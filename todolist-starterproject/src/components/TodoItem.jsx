@@ -2,38 +2,38 @@
 import React, {useState} from "react"
 
 // eslint-disable-next-line react/prop-types
-function TodoItem({item, removeItem,editItem}) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedTitle, setEditedTitle] = useState(item.title);
+function TodoItem({item, removeItem, completeTask}) {
 
-    const handleEdit = () => {
-        setIsEditing(true);
+    const [checked, setChecked] = useState();
+    const [complete, setComplete] = useState();
+
+    const handleChange = () => {
+        setChecked(!checked);
     };
 
-    const handleSave = () => {
-        editItem(item.id, editedTitle);
-        setIsEditing(false);
-    };
-
-    const handleChange = (e) => {
-        setEditedTitle(e.target.value);
-    };
+    const handleCompletion = () => {
+        if (checked) {
+            setComplete(complete);
+            completeTask(item.id, item.title)
+        } else {
+            alert("Check the box first!");
+        }
+    }
 
     return (
-        <li>
-            {isEditing ? (
-                <input type="text" value={editedTitle} onChange={handleChange} />
-            ) : (
-                <span>{item.title}</span>
-            )}
+        <div className={"todoitems-container"}>
+            <li>
+                    {item.title}
 
-            <button onClick={() => removeItem(item.id)}>Remove</button>
-            {isEditing ? (
-                <button onClick={handleSave}>Save</button>
-            ) : (
-                <button onClick={handleEdit}>Edit</button>
-            )}
-        </li>
+                <button id={"complete-btn"} onClick={handleCompletion}>Complete task</button>
+                <button id={"remove-btn"} onClick={() => removeItem(item.id)}>Remove</button>
+                <input type={"checkbox"}
+                       checked={checked}
+                       onChange={handleChange}/>
+                Done task?
+            </li>
+
+        </div>
     );
 }
 

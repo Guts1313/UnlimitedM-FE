@@ -89,3 +89,61 @@
   outline: none;
   border: none;
 }
+.todoitems-container,.todoitems-container li{
+  display: flex;
+  justify-content: space-evenly;
+  align-content: center;
+  padding: 5px 5px 5px 5px;
+  margin: 5px;
+
+
+}
+.todoitems-container{
+  background: #ddfaff;
+  backdrop-filter: blur(5px);
+  color: black;
+  border-radius: 30px;
+  width: 100%;
+
+}
+.todoitems-container li{
+  margin: 15px;
+  color: #00123f;
+  text-align: center;
+  gap: 10px;
+}
+#complete-btn{
+  background: blue;
+  background: linear-gradient(#3dec00, #110000);
+  backdrop-filter: blur(5px);
+  border: 1px solid white;
+  height: 28px;
+  border-radius: 15px;
+  color: white;
+  transform: translateY(-3px);
+
+}
+#remove-btn{
+  background: red;
+  background: linear-gradient(#fc3838, #110000);
+  backdrop-filter: blur(5px);
+  border: 1px solid white;
+  height: 28px;
+  border-radius: 15px;
+  color: #ffffff;
+  margin-left: 3px;
+  margin-right: 3px;
+  transform: translateY(-3px);
+
+}
+.todolist-container{
+  background: linear-gradient(rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.25));
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: space-evenly;
+  align-content: center;
+  margin-top: 10px;
+  border-radius: 5px;
+  margin-right: 5px;
+  box-shadow: 2px 1px 15px 3px rgb(93, 145, 252);
+}

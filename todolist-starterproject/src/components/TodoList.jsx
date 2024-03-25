@@ -3,14 +3,20 @@ import React from "react"
 import TodoItem from './TodoItem';
 
 // eslint-disable-next-line react/prop-types
-function TodoList({ todoItems, removeItem,editItem }) {
+function TodoList({ todoItems, removeItem,editItem,completeTask }) {
   return (
+      <div className={"todolist-container"}>
+
       <ul>
-        {/* eslint-disable-next-line react/prop-types */}
+
+          {/* eslint-disable-next-line react/prop-types */}
         {todoItems.map(item => (
-            <TodoItem key={item.id} item={item} removeItem={removeItem} editItem={editItem} />
+            <TodoItem key={item.id} item={item} removeItem={removeItem} editItem={editItem} completeTask={completeTask} />
         ))}
+
       </ul>
+      </div>
+
   );
 }
 
