@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import Lottie from "lottie-react";
-import testanimation from './testanimation.json';
-import loginsuccessanimation from './loginsuccessanimation.json';
+import testanimation from '../assets/testanimation.json';
+import loginsuccessanimation from '../assets/loginsuccessanimation.json';
 import axios from 'axios'; // First, ensure Axios is imported at the top of your file
-import SocialIcons from "./SocialIcons";
+import SocialIcons from "../components/SocialIcons";
 
 function Login() {
     const [username, setUsername] = useState('');

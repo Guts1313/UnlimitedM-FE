@@ -1,8 +1,8 @@
-import './App.css';
-import Login from './Login'; // Import your Login component
+import './styling/App.css';
+import Login from './pages/Login'; // Import your Login component
 import Lottie from "lottie-react";
-import testanimation from "./testanimation.json";
-import loginsuccessanimation from './testanimation.json';
+import testanimation from "./assets/testanimation.json";
+import loginsuccessanimation from './assets/testanimation.json';
 
 import axios from 'axios'; // You might need to install axios via npm if you haven't already
 

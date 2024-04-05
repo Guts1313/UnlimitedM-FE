@@ -1,7 +1,7 @@
 import React from 'react';
 import {faFacebookF, faGithub, faGoogle, faLinkedinIn} from "@fortawesome/free-brands-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import './SocialIcons.css'; // Make sure to import the CSS file
+import '../styling/SocialIcons.css'; // Make sure to import the CSS file
 const SocialIcons = () => {
     return (
         <div className="social-icons">
