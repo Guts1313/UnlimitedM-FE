@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import Lottie from "lottie-react";
-import testanimation from '../assets/testanimation.json';
-import loginsuccessanimation from '../assets/loginsuccessanimation.json';
+import testanimation from './/assets/testanimation.json';
+import loginsuccessanimation from './/assets/loginsuccessanimation.json';
 import axios from 'axios'; // First, ensure Axios is imported at the top of your file
-import SocialIcons from "../components/SocialIcons";
 import {useNavigate} from "react-router-dom";
-import '../styling/index.module.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -48,9 +48,9 @@ function Login() {
         right: 0,
         transform: isActive ? 'translateX(200%)' : 'translateX(0)'
     });
-
+//dac7f759
     const containerStyle = {
-        backgroundColor: '#fff',
+        background: 'linear-gradient(45deg, #ffffff7a, #ffffff59)',
         borderRadius: '30px',
         boxShadow: '0 5px 15px rgba(0, 0, 0, 0.35)',
         position: 'relative',
@@ -58,10 +58,11 @@ function Login() {
         width: '768px',
         maxWidth: '100%',
         minHeight: '480px',
+        backdropFilter:'blur(10px)'
     };
 
-    const formStyle = {
-        backgroundColor: '#fff',
+    const formStyleSignIn = {
+        background: 'linear-gradient(to right, rgb(92, 107, 192), rgba(81, 45, 168, 0))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -69,7 +70,15 @@ function Login() {
         padding: '0 40px',
         height: '100%',
     };
-
+    const formStyle = {
+        background: 'linear-gradient(to left, rgb(92, 107, 192), rgba(81, 45, 168, 0))',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        padding: '0 40px',
+        height: '100%',
+    };
     const inputStyle = {
         backgroundColor: '#eee',
         border: 'none',
@@ -233,7 +242,6 @@ function Login() {
             <div style={formContainerStyle(isActive, 'right')}>
                 <form style={formStyle} onSubmit={handleRegister}>
                     <h1>Create Account</h1>
-                    <SocialIcons/>
                     <span>or use your email for registration</span>
                     <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} style={inputStyle}/>
                     <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle}/>
@@ -243,10 +251,9 @@ function Login() {
             </div>
 
             <div style={formContainerStyle(isActive, 'left')}>
-                <form style={formStyle} onSubmit={handleSubmit}>
+                <form style={formStyleSignIn} onSubmit={handleSubmit}>
                     <h1>Sign In</h1>
                     <div className="social-icons">
-                        <SocialIcons/>
                     </div>
                     <span>or use your email password</span>
                     <input type="username" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)}

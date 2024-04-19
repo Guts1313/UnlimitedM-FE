@@ -1,21 +1,24 @@
-import './styling/App.css';
-import Login from './pages/Login'; // Import your Login component
 import Lottie from "lottie-react";
 import testanimation from "./assets/testanimation.json";
 import loginsuccessanimation from './assets/testanimation.json';
+import styles from "../src/styling/index.module.css"
+import axios from 'axios';
 
-import axios from 'axios'; // You might need to install axios via npm if you haven't already
+import React from 'react';
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
+import Home from './pages/Home';  // Assuming you have a Home component
+import Login from './pages/Login';
 
 function App() {
-
-
     return (
-        <div>
-            <Login/>
-        </div>
+        <Router>
+                <Routes>
+                    <Route path="/" element={<Home/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="*" element={<Navigate to="/"/>}/>
+                </Routes>
+        </Router>
     );
-
-
 
 
 }

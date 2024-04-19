@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styling/index.css'; // This line imports the main stylesheet
 import App from './App'; // This line imports your main App component
 
 ReactDOM.render(
@@ -8,4 +7,5 @@ ReactDOM.render(
         <App />
     </React.StrictMode>,
     document.getElementById('root')
+
 );
