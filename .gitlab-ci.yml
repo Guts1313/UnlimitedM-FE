@@ -1,0 +1,47 @@
+stages:
+  - test
+  - build
+  - push
+
+# Job to test the application
+test_application:
+  stage: test
+  image: node:14-alpine
+  script:
+    - npm install
+    - npm test
+  tags:
+    - shell
+  only:
+    - master
+    - merge_requests
+
+# Job to build the Docker image
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  variables:
+    DOCKER_DRIVER: overlay2
+  before_script:
+    - docker info
+  script:
+    - docker build -t my-frontend:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA} .
+  tags:
+    - shell
+
+# Job to push the Docker image to a registry
+push_image:
+  stage: push
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+  script:
+    - docker push my-frontend:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHA}
+  tags:
+    - shell
+  only:
+    - workbranch  # Or any other branch or tag you want to have automatic deployments for
