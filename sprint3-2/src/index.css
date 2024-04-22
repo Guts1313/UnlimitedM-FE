@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding:0;
+  height: 100vh;
+  background: url('https://cms-cdn.thesolesupplier.co.uk/2022/08/how-to-store-and-display-your-sneaker-collection_w1160_h672.jpg.webp');
+}
+
+*{
+  margin: 0;
+  padding:0;
+}
+.navbar, .sidebar, .backdrop {
+  z-index: 1050; /* Ensures navbar and sidebar are above most content */
+}
+
+.hero {
+  z-index: 500; /* Lower than the sidebar but above regular content */
+  position: relative; /* Needed to establish a stacking context for z-index */
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding:0;
+}
+
+/* Ensures the sidebar is visible above all page content */
+.sidebar {
+  margin-top: 7%;
+  z-index: 1060; /* Higher than navbar to ensure it's on top when expanded */
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+}
+
+.backdrop {
+  z-index: 1055; /* Just below the sidebar but above everything else */
+}
+
+/* General z-index management for the carousel to ensure it's below the sidebar */
+.carousel, .carousel-inner, .carousel-item {
+  z-index: 500; /* Ensure this is less than the sidebar's z-index */
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.container{
+  display: flex;
+  transform: translateY(35%);
+  color: black;
+  font-weight: 900;
+  width: 100%;
+}
+.container-nav{
+  display: flex;
+  font-weight: 700;
+  transform: translateY(35%);
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+
+}
+.container-nav .nav-link{
+  font-weight: 900;
+  color: white;
+
+}
+.nav-item{
+  color: white;
+}
+
+.navbar{
+  height: 110px;
+  transform: translateY(-20px);
+  background: linear-gradient(rgba(62, 55, 194, 0.87), rgba(255, 255, 255, 0.18));
+}
+
+/*.navbar {*/
+/*  margin-bottom: 11%;*/
+/*}*/
