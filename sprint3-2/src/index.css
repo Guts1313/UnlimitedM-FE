@@ -7,8 +7,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   padding:0;
   height: 100vh;
-  background: url('https://cms-cdn.thesolesupplier.co.uk/2022/08/how-to-store-and-display-your-sneaker-collection_w1160_h672.jpg.webp');
+  /*background: url('https://cms-cdn.thesolesupplier.co.uk/2022/08/how-to-store-and-display-your-sneaker-collection_w1160_h672.jpg.webp');*/
+  background-image: url("https://i.imgur.com/yczMTop.jpeg");
+
 }
+
+html{
+  height: 100vh;
+  margin:0;
+  padding: 0;
+ }
 
 *{
   margin: 0;
@@ -75,8 +83,13 @@ code {
 .navbar{
   height: 110px;
   transform: translateY(-20px);
-  background: linear-gradient(rgba(62, 55, 194, 0.87), rgba(255, 255, 255, 0.18));
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
 }
+.bg-transparent{
+  background: linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.17));
+  backdrop-filter: blur(8px);
+}
+
 
 /*.navbar {*/
 /*  margin-bottom: 11%;*/

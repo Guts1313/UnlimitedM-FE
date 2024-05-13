@@ -1,0 +1,39 @@
+.card-img {
+    background-size: cover;
+    min-width: 100%;
+    background-position: center;
+    height: 640px;
+    object-fit: cover;
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+.card-title {
+    align-items: flex-start;
+    transform: translateY(-160px);
+}
+
+.btns {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    padding: 0;
+}
+
+.btn.btn-outline-light {
+    height: 45px;
+    font-weight: 700;
+    align-self: baseline;
+    font-size: medium;
+    padding: 1px;
+    margin-left: 5%;
+    width: 6.5rem;
+    padding-top: 7px;
+}
+
+.btn.bid.btn-outline-light i{
+    padding: 0;
+    margin-right:2rem;
+
+
+}

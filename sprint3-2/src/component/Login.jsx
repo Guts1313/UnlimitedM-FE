@@ -32,7 +32,7 @@ function Login() {
         textAlign: 'center',
         top: 0,
         transition: 'all 0.6s ease-in-out',
-        background: 'linear-gradient(to right, #5c6bc0, #512da8)',
+        background: 'linear-gradient(to right, rgb(255 255 255 / 0%), rgb(18 18 37 / 97%))',
         left:'-100%',
         transform: 'translateX(0)'
 
@@ -62,7 +62,7 @@ function Login() {
     };
 
     const formStyleSignIn = {
-        background: 'linear-gradient(to right, rgb(92, 107, 192), rgba(81, 45, 168, 0))',
+        background: 'linear-gradient(to right, rgb(6 6 6 / 47%), rgb(5 4 6 / 0%))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -71,7 +71,7 @@ function Login() {
         height: '100%',
     };
     const formStyle = {
-        background: 'linear-gradient(to left, rgb(92, 107, 192), rgba(81, 45, 168, 0))',
+        background: 'linear-gradient(to right, rgb(255 255 255 / 0%), rgb(18 18 37 / 97%))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -80,7 +80,7 @@ function Login() {
         height: '100%',
     };
     const inputStyle = {
-        backgroundColor: '#eee',
+        background: 'linear-gradient(45deg, rgb(0 0 0), rgb(0 3 39 / 54%))',
         border: 'none',
         margin: '8px 0',
         padding: '10px 15px',
@@ -88,35 +88,36 @@ function Login() {
         borderRadius: '8px',
         width: '100%',
         outline: 'none',
+        color:'white'
     };
     const handleToggleActive = () => {
         setIsActive(!isActive); // Toggle the active state to switch forms
     };
     const buttonStyle = {
-        backgroundColor: '#1a0059',
+        background: 'linear-gradient(45deg, #000000, #000439)',
         color: '#fff',
         fontSize: '12px',
         padding: '10px 45px',
-        border: '1px solid transparent',
-        borderRadius: '8px',
         fontWeight: '600',
         letterSpacing: '0.5px',
         textTransform: 'uppercase',
         marginTop: '10px',
         cursor: 'pointer',
+        border:'2px solid rgba(255, 255, 255, 0.59)',
+        borderRadius:`15px`
     };
     const buttonStyleGhost = {
-        backgroundColor: '#1a0059',
+        background: 'linear-gradient(45deg, #000000, #000439)',
         color: '#fff',
         fontSize: '12px',
         padding: '10px 45px',
-        border: '1px solid transparent',
-        borderRadius: '8px',
+        borderRadius: '15px',
         fontWeight: '600',
         letterSpacing: '0.5px',
         textTransform: 'uppercase',
         cursor: 'pointer',
-        transform:'translateX(110%)'
+        transform:'translateX(110%)',
+        border:`2px solid rgba(255, 255, 255, 0.59)`
     };
     const formContainerStyle = (isActive, position) => ({
         position: 'absolute',
@@ -167,11 +168,12 @@ function Login() {
             });
             if (response && response.data) {
                 console.log('Login successful', response.data);
+                console.log('username: ', response.data.username)
                 localStorage.setItem('token', response.data.token);
                 setShowLoginSuccessAnimation(true); // Ensure this is set here
                 setTimeout(() => {
                     setShowLoginSuccessAnimation(false);
-                    navigate('/');  // Redirect to Home page after animation
+                    navigate('/');
                 }, 3000);  // Duration of the animation
             } else {
                 throw new Error('Invalid server response');
@@ -189,7 +191,8 @@ function Login() {
             const response = await axios.post('http://localhost:8080/unlimitedmarketplace', {
                 userName: name,
                 email: email,
-                passwordHash: signupPassword
+                passwordHash: signupPassword,
+                role:"USER"
             });
 
             console.log("Respnse:", response.data)

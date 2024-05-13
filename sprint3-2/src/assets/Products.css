@@ -1,0 +1,125 @@
+
+.bg-products {
+    background-image: url("https://i.imgur.com/yczMTop.jpeg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* This can help with keeping the background fixed during scrolling */
+    min-height: 100%; /* Ensures the element is at least the height of the viewport */
+    width: 100%; /* Ensures the element is as wide as the viewport */
+    background-position: center;
+}
+
+
+.products-container .card {
+    flex: 0 0 300px; /* Cards won't grow or shrink */
+    margin-bottom: 16px; /* Adjust the bottom margin to create space between rows */
+    height: 320px;
+    width: 350px;
+    /*margin-right: 20px;*/
+    /*margin-left: 5%;*/
+}
+/*.btn{*/
+/*    margin-top:-10px;*/
+/*    width: 25%;*/
+/*}*/
+.btn.pb-0.mb-0 {
+    /* Your styles here */
+    color: blue; /* Example property */
+    border: 2px solid #000000; /* Example property */
+}
+.carousel-container{
+    height: 400px;
+    width: 100%;
+}
+.carousel-inner{
+    border-radius: 100px;
+    min-width: 100%;
+    width: 100%;
+    margin-left: -12px;
+}
+.carousel-item.active{
+    height: 600px;
+    width: 100%;
+    min-width: 100%;
+    background-position: center;
+    background-size: contain;
+}
+.carousel-item {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.carousel-item img {
+    flex: 1 0 50%; /* allows images to shrink but not disappear */
+    max-width: 50%; /* ensures no image takes more than half the space */
+}
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 200px;  /* Example: Adjust height to keep images visually consistent on small screens */
+    }
+}
+#buy-btn{
+    color: white;
+    transition: transform 0.3s ease, background-color 0.3s;
+    cursor: pointer;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    background-color: black;
+
+}
+#buy-btn:hover{
+    background: linear-gradient(rgb(10, 1, 47), rgba(0, 0, 0, 0.94));
+    color: white;
+    border-radius: 100px;
+    font-weight: bold;
+    transform: scale(1.3);
+
+}
+#bid-btn{
+    border: none;
+    background-color: rgba(5, 44, 17, 0.9);
+    transition: transform 0.3s ease-in-out,background-color 0.3s;
+    border-radius: 15px;
+    color: white;
+
+}
+#bid-btn:hover{
+    border-radius: 60px;
+    background-color: #080225;
+    transform: scale(1.3);
+
+}
+.card{
+    box-shadow: 4px 11px 9px 20px white;
+    border: 1px solid white;
+
+}
+.card-body.d-flex.flex-column{
+    border-radius: 60px;
+    background:transparent;
+    backdrop-filter: blur();
+    border: none;
+
+}
+.products-container{
+    background: linear-gradient(#000000, rgba(0, 0, 0, 0.9));
+    border-radius: 50px;
+    margin-top: 5%;
+    backdrop-filter: blur(20px);
+    height: 100vh;
+}
+
+.products-container .card-img-top {
+    width: 100%; /* Ensures image takes up 100% of card width */
+    object-fit: cover; /* Ensures images cover the area without distorting aspect ratio */
+    height: auto;
+    aspect-ratio: 16 / 9; /* Maintains an aspect ratio of 16:9 */
+}
+
+@media (min-width: 768px) {
+    .row-cols-md-3 > * {
+        flex: 0!important;
+        width: 33.333333% !important;
+    }
+}

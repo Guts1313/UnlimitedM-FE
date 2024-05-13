@@ -5,7 +5,7 @@
     width: 250px; /* Adjust the width of the sidebar */
     height: 100vh;
     background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
-    backdrop-filter: blur(10px);    transition: right 0.3s ease;
+    backdrop-filter: blur(10px);    transition: ease-in-out 0.3s;
     padding: 1rem;
     box-shadow: -2px 0 5px rgba(0,0,0,0.5);
     z-index: 1040;
@@ -13,8 +13,11 @@
 
 .sidebar.open {
     right: 0; /* Moves sidebar into view */
-    background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+    background: linear-gradient(rgb(0 0 0 / 92%), rgb(14 0 0 / 88%));
     backdrop-filter: blur(10px);
+    margin-top: 13%;
+    border-radius: 100px;
+    color: white;
 }
 
 .sidebar ul {
@@ -44,4 +47,7 @@
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1035; /* Below sidebar but above everything else */
+}
+.btns{
+    color: red;
 }
