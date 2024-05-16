@@ -50,4 +50,33 @@
 }
 .btns{
     color: red;
+    margin-top: -2.9rem;
 }
+.navbar-nav{
+    margin-top: -2.9rem;
+}
+.nav-link {
+    transition: color 0.3s ease-in-out, background-color 0.3s ease; /* Smooth transition for color and background */
+}
+
+.nav-link:hover, .nav-link:focus { /* Focus is added for accessibility */
+    color: #a90101 !important; /* Ensures the color change is applied over Bootstrap */
+    background-color: white !important; /* Ensures the background change is applied */
+    border-radius: 30px;
+}
+ul.navbar-nav li.nav-item a.nav-link {
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 30px;
+}
+
+ul.navbar-nav li.nav-item a.nav-link:hover,
+ul.navbar-nav li.nav-item a.nav-link:focus {
+    color: #ad0000 !important;
+    background-color: white !important;
+    border-radius: 30px;
+}
+.navbar-toggler{
+    margin-top: -2rem;
+}
+
+

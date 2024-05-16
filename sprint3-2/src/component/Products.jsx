@@ -2,16 +2,19 @@ import React from 'react';
 import '../assets/Products.css'
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import {Link} from "react-router-dom"; // Make sure to install axios with 'npm install axios' if not already installed
+import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 function Products(props) {
     const [products, setProducts] = useState([]); // Initializes the products state to an empty array
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetches products from the backend when the component mounts
-        const token = localStorage.getItem('token'); // Replace with your token retrieval method
+        const token = localStorage.getItem('accessToken'); // Replace with your token retrieval method
         const headers = {
-            'Authorization': `Bearer ${token}`
+            'Authorization': `Bearer ${token}`,
+            role:"USER"
         };
 
         axios.get('http://localhost:8080/unlimitedmarketplace/products', {headers})
@@ -20,9 +23,18 @@ function Products(props) {
             })
             .catch(error => {
                 console.error('There was an error fetching the products:', error);
+                if (error.response && error.response.status === 401) {
+                    console.log(error.response)
+                    console.log("Errorresponse status:" + error.response.status);
+                    setTimeout(() => {
+                        navigate('/login');
+                    }, 10);
+                } else {
+                    console.error('Network or other error:', error);
+                }
             });
-
-    }, []); // The empty array as a second argument ensures this effect runs once after initial render
+    }, [navigate]); // Include navigate in the dependency array
+    // The empty array as a second argument ensures this effect runs once after initial render
 
     useEffect(() => {
         document.body.classList.add('bg-products')
@@ -41,7 +53,7 @@ function Products(props) {
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                 </ol>
-                <div className="carousel-inner d-flex flex-shrink-1">
+                <div className="carousel-inner d-flex">
                     <div className="carousel-item active d-flex h-25">
                         <img
                             src="https://www.oneills.com/media/wysiwyg/cms-category-landing/sale-subcat/gen-sale-landing-d.jpg"
@@ -95,7 +107,7 @@ function Products(props) {
                                 </div>
                             </Link>
                         </div>
-                        ))}
+                    ))}
                 </div>
             </div>
             );

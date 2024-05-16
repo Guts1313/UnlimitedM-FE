@@ -9,6 +9,12 @@ body {
   height: 100vh;
   /*background: url('https://cms-cdn.thesolesupplier.co.uk/2022/08/how-to-store-and-display-your-sneaker-collection_w1160_h672.jpg.webp');*/
   background-image: url("https://i.imgur.com/yczMTop.jpeg");
+  /*background-image: url("https://assets-global.website-files.com/62eff2679147fe8025608aad/6573b1c984845393f2ba40e4_BLOG%20Cover.gif");*/
+  width: 100%;
+  background-size: cover;
+  aspect-ratio: 16/9;
+  background-attachment: scroll;
+  background-position: center;
 
 }
 

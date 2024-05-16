@@ -168,8 +168,12 @@ function Login() {
             });
             if (response && response.data) {
                 console.log('Login successful', response.data);
-                console.log('username: ', response.data.username)
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('accessToken', response.data.accessToken);
+                localStorage.setItem('refreshToken', response.data.refreshToken); // If also receiving refreshToken
+                console.log('Login successful', localStorage.getItem('accessToken'));
+                console.log('Login successful', localStorage.getItem('refreshToken'));
+
+
                 setShowLoginSuccessAnimation(true); // Ensure this is set here
                 setTimeout(() => {
                     setShowLoginSuccessAnimation(false);
