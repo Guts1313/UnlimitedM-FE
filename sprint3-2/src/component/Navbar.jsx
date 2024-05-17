@@ -49,7 +49,7 @@ function Navbar(props) {
                             <Link to="/login" className="btn btn-outline-light" type="submit"><i
                                 className="fa fa-user-plus  me-1 text-danger"></i>Register</Link>
                             <Link to="/public" className="btn btn-outline-light" type="submit"><i
-                                className="fa fa-cart-plus  me-1 text-danger"></i>Cart(0)</Link>
+                                className="fa fa-bell  me-1 text-danger"></i></Link>
                         </div>
                     </div>
                 </div>

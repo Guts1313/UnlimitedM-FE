@@ -14,7 +14,6 @@ function Products(props) {
         const token = localStorage.getItem('accessToken'); // Replace with your token retrieval method
         const headers = {
             'Authorization': `Bearer ${token}`,
-            role:"USER"
         };
 
         axios.get('http://localhost:8080/unlimitedmarketplace/products', {headers})

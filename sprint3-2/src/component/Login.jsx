@@ -170,6 +170,8 @@ function Login() {
                 console.log('Login successful', response.data);
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken); // If also receiving refreshToken
+                localStorage.setItem('userId', response.data.userId);
+
                 console.log('Login successful', localStorage.getItem('accessToken'));
                 console.log('Login successful', localStorage.getItem('refreshToken'));
 
