@@ -6,7 +6,7 @@ function Home(props) {
     return (
         <div>
             <div>
-                <div className="card bg-dark text-white">
+                <div className="card text-white">
                     <img
                         src="https://images.wallpaperscraft.com/image/single/sneakers_spray_reflection_166141_1920x1080.jpg"
                         height="540px" width="200px" className="card-img" alt="..."/>
@@ -17,8 +17,10 @@ function Home(props) {
                         <p className="card-text text-bg-light text-danger-emphasis text-center rounded-2 fw-bold fs-4 align-self-center">Buy
                             or Sell all the HOT sneaker models on even HOTTER prices</p>
                         <Link to="/login"
-                              className='btn btn-outline-danger btn-dark text-danger fw-bold fs-4 text-white'><i
-                            className="fa fa-user-plus mx-2"/>Join Now!</Link>
+                              className='text-danger fw-bold fs-4 text-white text-decoration-none'><button className="btn btn-outline-danger bg-black"><i
+                            className="fa fa-user-plus"/> Join Now!
+                        </button>
+                        </Link>
                     </div>
                 </div>
                 <div className="card mb-3">

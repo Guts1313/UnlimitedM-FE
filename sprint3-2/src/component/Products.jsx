@@ -45,27 +45,27 @@ function Products(props) {
 
     return (
 
-        <div className="carousel-container container-fluid">
-            <div id="carouselExampleIndicators" className="carousel slide" data-ride="carousel">
+        <div className="carousel-container w-100 vh-100">
+            <div id="carouselExampleIndicators" className="carousel slide rounded-4" data-ride="carousel">
                 <ol className="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                 </ol>
-                <div className="carousel-inner d-flex">
-                    <div className="carousel-item active d-flex h-25">
+                <div className="carousel-inner container-fluid rounded-4 opacity-75 bg-opacity-100 d-flex mb-2 gx-0 mw-100 mw-100 flex-shrink-1 rounded-4">
+                    <div className="carousel-item active d-flex h-25 flex-shrink-1">
                         <img
                             src="https://www.oneills.com/media/wysiwyg/cms-category-landing/sale-subcat/gen-sale-landing-d.jpg"
-                            height="600px" className="flex-fill" alt="First slide"/>
+                            height="600px" className="flex-shrink-0" alt="First slide"/>
                         <img
                             src="https://www.oneills.com/media/wysiwyg/cms-category-landing/sale-subcat/gen-sale-landing-d.jpg"
                             height="640px"
                             className="flex-fill" alt="Second slide"/>
                     </div>
-                    <div className="carousel-item d-flex h-25">
+                    <div className="carousel-item d-flex h-25 flex-shrink-0">
                         <img
                             src="https://www.oneills.com/media/wysiwyg/cms-category-landing/sale-subcat/gen-sale-landing-d.jpg"
-                            className="flex-fill"
+                            className="flex-shrink-0"
                             height="640px" alt="Third slide"/>
                         <img src="https://i.ytimg.com/vi/TTSwOcCOjDM/maxresdefault.jpg" height="640px"
                              className="flex-fill"
@@ -83,37 +83,67 @@ function Products(props) {
                     <span className="sr-only">Next</span>
                 </a>
             </div>
-
-            <div className="products-container d-grid">
-                <div className="row row-cols-1 row-cols-md-3 g-1 py-5">
+            <div className="container-fluid m-0 p-0 w-100">
+                <div className="row">
+                    <div className="col-md-6">
+                        <Link to={'/listing'}
+                              className={"btn btn-outline-danger w-100 bg-black fw-bolder fs-2 my-3"}
+                              style={{height: 100}}><i
+                            className="fa fa-plus-circle text-success shadow-lg border-0 my-4 fa-spin"></i> List an item
+                        </Link>
+                    </div>
+                    <div className="col-md-6">
+                        <Link
+                            className={"btn btn-outline-danger w-100 bg-white text-bg-info fw-bolder fs-2 my-3"}
+                            style={{height: 100}}><i className="fa fa-cart-arrow-down my-4 text-danger fa-spin"></i> Shop all
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <div className="products-container d-grid text-decoration-none container-fluid justify-content-center">
+                <div className="row row-cols-md-3 py-0 text-decoration-none justify-content-center">
                     {products.map((product) => (
-                        <div className="d-flex justify-content-center mb-4 mx-5 my-5" key={product.id}>
-                            <Link to={`/product/${product.id}`} className="card border-white">
+                        <div className="d-flex justify-content-center text-decoration-none mb-4 mx-5 my-5"
+                             key={product.id}>
+                            <Link to={`/product/${product.id}`} className="card border-0">
                                 <img src={product.productUrl} className="card-img-top" alt={product.productName}/>
-                                <div className="card-body d-flex flex-column text-black mx-0 my-0 px-1 w-100">
+                                <div
+                                    className="card-body bg-transparent shadow-lg p-3 mb-5 bg-body-tertiary bg-opacity-10 text-decoration-none d-flex flex-column text-black mx-0 my-0 px-1 w-100">
                                     <h5 className="card-title">{product.productName}</h5>
-                                    <p className="card-text">Price: ${product.productPrice}</p>
-                                    <p className="card-text">Added: {product.productDateAdded}</p>
-                                    <div className="btn-container d-flex align-self-end px-3 gap-5">
-                                        <button id="buy-btn" className="btn pb-0 mb-0"><i
-                                            className="fa fa-cart-plus"> Buy
-                                            Now</i></button>
-                                        <button id="bid-btn" className="btn pb-0 mb-0 "><i
-                                            className="fa fa-adn"> Place
-                                            a
-                                            Bid</i></button>
+                                    <div className="d-flex flex-column justify-content-evenly">
+                                        {/*<text*/}
+                                        {/*    className="fs-5 mb-1 d-flex text-black fw-bold text-center text-decoration-none">Price:{product.productPrice}*/}
+                                        {/*    <i className="fa fa-eur"></i>*/}
+                                        {/*</text>*/}
+                                        <div
+                                            className="container-buttons w-100 py-3 bg-black d-flex justify-content-around">
+                                            <button id="buy-now"
+                                                    className="buy-btn border-2 border-end border-light w-50 bg-black text-white border-0 fw-bold">
+                                                <i className="fa d-inline-flex fa-cart-plus text-success"></i>Buy
+                                                now
+                                            </button>
+                                            <button id="bid-now"
+                                                    className="bid-btn w-50 bg-black border-0 text-white fw-bold">
+                                                <i className="fa d-inline-flex fa-adn text-danger"></i> Place
+                                                bid
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
+
                             </Link>
+
                         </div>
                     ))}
                 </div>
             </div>
-            );
+            )
+            ;
         </div>
 
 
-    );
+    )
+        ;
 }
 
 export default Products;

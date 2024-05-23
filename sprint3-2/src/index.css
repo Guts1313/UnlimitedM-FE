@@ -8,16 +8,27 @@ body {
   padding:0;
   height: 100vh;
   /*background: url('https://cms-cdn.thesolesupplier.co.uk/2022/08/how-to-store-and-display-your-sneaker-collection_w1160_h672.jpg.webp');*/
-  background-image: url("https://i.imgur.com/yczMTop.jpeg");
+  background-image: url("https://i.pinimg.com/originals/9f/d0/27/9fd0273e36cceb3cdec689552647e5a5.gif");
   /*background-image: url("https://assets-global.website-files.com/62eff2679147fe8025608aad/6573b1c984845393f2ba40e4_BLOG%20Cover.gif");*/
   width: 100%;
-  background-size: cover;
-  aspect-ratio: 16/9;
+  background-size: contain;
+  background-position: 100px -50px;
   background-attachment: scroll;
-  background-position: center;
+  min-width: 300px;
+  border-radius: 10px;
+  object-fit: scale-down;
 
 }
-
+.user-input.bg-gradient{
+  background: linear-gradient(rgba(0, 0, 0, 0.99), rgba(24, 16, 16, 0.66)) !important;
+  backdrop-filter: contrast(10%);
+  min-height: 50vh !important;
+  box-shadow: inset 0px -1px 12px 3px #a20202
+}
+.form-container{
+  min-height: 90vh!important;
+  background: linear-gradient(rgb(204, 0, 0), rgb(204, 0, 0)) !important;
+}
 html{
   height: 100vh;
   margin:0;

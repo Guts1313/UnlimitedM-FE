@@ -60,13 +60,17 @@
 }
 
 .card.mb-3 {
-    box-shadow: 1px 1px 1px 1px black;
+    box-shadow: 1px 1px 1px 1px #de0707;
     margin-top: 7rem;
     border: none;
 }
 
 .card-text small {
     color: #ff3838;
+}
+.card.text-white{
+    box-shadow: 8px 0px 20px 6px #410000;
+    border:none;
 }
 
 .col-md-8 {

@@ -5,7 +5,9 @@ import loginsuccessanimation from '../assets/loginsuccessanimation.json';
 import axios from 'axios'; // First, ensure Axios is imported at the top of your file
 import {useNavigate} from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { useNotifications } from './NotificationContext';
 
+// eslint-disable-next-line react-hooks/rules-of-hooks
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -15,7 +17,7 @@ function Login() {
     const [email, setEmail] = useState('');
     const [signupPassword, setSignupPassword] = useState('');
     const navigate = useNavigate();
-
+    const { connectWebSocket } = useNotifications();
     const [isRegistered, setIsRegistered] = useState(false);
     const [showAnimation, setShowAnimation] = useState(false);
     const [showLoginSuccessAnimation, setShowLoginSuccessAnimation] = useState(false);
@@ -163,24 +165,20 @@ function Login() {
     const onLogin = async (username, password) => {
         try {
             const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/login', {
-                username:username,
-                passwordHash:password
+                username,
+                passwordHash: password
             });
             if (response && response.data) {
-                console.log('Login successful', response.data);
                 localStorage.setItem('accessToken', response.data.accessToken);
-                localStorage.setItem('refreshToken', response.data.refreshToken); // If also receiving refreshToken
+                localStorage.setItem('refreshToken', response.data.refreshToken);
                 localStorage.setItem('userId', response.data.userId);
-
-                console.log('Login successful', localStorage.getItem('accessToken'));
-                console.log('Login successful', localStorage.getItem('refreshToken'));
-
-
-                setShowLoginSuccessAnimation(true); // Ensure this is set here
+                // Establish WebSocket connection after successful login
+                connectWebSocket(response.data.accessToken);
+                setShowLoginSuccessAnimation(true);
                 setTimeout(() => {
                     setShowLoginSuccessAnimation(false);
                     navigate('/');
-                }, 3000);  // Duration of the animation
+                }, 3000);
             } else {
                 throw new Error('Invalid server response');
             }
@@ -189,8 +187,9 @@ function Login() {
             setError('Failed to login: ' + (error.response?.data?.message || error.message));
             setShowLoginSuccessAnimation(false);
         }
-
     };
+
+
     const handleRegister = async (event) => {
         event.preventDefault();
         try {

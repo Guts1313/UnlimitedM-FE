@@ -1,4 +1,3 @@
-import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Navbar from "./component/Navbar";
 import Home from "./page/Home";
@@ -8,15 +7,19 @@ import ProductDetail from "./component/ProductDetail"; // Corrected the import p
 import history from './History';
 import axios from 'axios';
 import {jwtDecode} from "jwt-decode";
+import AddListing from "./component/AddListing";
+import UserProfile from "./component/UserProfile";
+import MyBids from "./component/MyBids";
+import SecurityPage from "./component/SecurityPage";
 
-function isTokenExpired(token) {
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    return decodedToken.exp < currentTime;
-}
 
 
 function App() {
+    function isTokenExpired(token) {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        return decodedToken.exp < currentTime;
+    }
 
     let isRefreshing = false;
     let failedQueue = [];
@@ -50,6 +53,7 @@ function App() {
                                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
                                 isRefreshing = false;
                                 processQueue(null, res.data.accessToken);
+                                console.log("Refresh success...happy shopping")
                                 return axios(originalRequest);
                             }
                         } catch (refreshError) {
@@ -84,6 +88,11 @@ function App() {
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/products" element={<Products/>}/>
                 <Route path="/product/:id" element={<ProductDetail/>}/>
+                <Route path="/listing" element={<AddListing/>}/>
+                <Route path="/profile" element={<UserProfile/>}/>
+                <Route path="/my-bids" element={<MyBids/>}/> {/* Add this line */}
+                <Route path="/user-security" element={<SecurityPage/>}/> {/* Add this line */}
+
             </Routes>
         </Router>
     );
@@ -91,3 +100,4 @@ function App() {
 
 
 export default App;
+
