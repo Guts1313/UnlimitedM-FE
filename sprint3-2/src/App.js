@@ -11,6 +11,7 @@ import AddListing from "./component/AddListing";
 import UserProfile from "./component/UserProfile";
 import MyBids from "./component/MyBids";
 import SecurityPage from "./component/SecurityPage";
+import AdminPanel from "./component/AdminPanel";
 
 
 
@@ -92,7 +93,7 @@ function App() {
                 <Route path="/profile" element={<UserProfile/>}/>
                 <Route path="/my-bids" element={<MyBids/>}/> {/* Add this line */}
                 <Route path="/user-security" element={<SecurityPage/>}/> {/* Add this line */}
-
+                <Route path="/admin-panel" element={<AdminPanel/>}/> {/* Add this line */}
             </Routes>
         </Router>
     );

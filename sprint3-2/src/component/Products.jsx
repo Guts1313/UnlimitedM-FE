@@ -11,10 +11,8 @@ function Products(props) {
 
     useEffect(() => {
         // Fetches products from the backend when the component mounts
-        const token = localStorage.getItem('accessToken'); // Replace with your token retrieval method
-        const headers = {
-            'Authorization': `Bearer ${token}`,
-        };
+        const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
+
 
         axios.get('http://localhost:8080/unlimitedmarketplace/products', {headers})
             .then(response => {
@@ -42,6 +40,7 @@ function Products(props) {
         }
 
     }, []);
+
 
     return (
 

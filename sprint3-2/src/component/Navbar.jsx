@@ -5,14 +5,19 @@ import {useNotifications} from './NotificationContext';
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
-    const {notifications} = useNotifications();
+    const { notifications } = useNotifications();
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
-    const showNot = () => {
-        console.log(notifications);
-    }
+
+    // Filter out duplicate notifications based on a unique property
+    const filterNotifications = (notifications) => {
+        return [...new Set(notifications)];
+    };
+    const filteredNotifications = filterNotifications(notifications);
+
+    console.log(notifications);
 
     return (
         <div className={"nav-bg"}>
@@ -54,11 +59,11 @@ function Navbar() {
                             <div className="notification-container border-0">
                                 <div className="fa bell-icon">
                                     <i className="fa fa-bell p-1"></i>
-                                    {notifications.length > 0 &&
-                                        <span className="notification-count">{notifications.length}</span>}
+                                    {filteredNotifications.length > 0 &&
+                                        <span className="notification-count">{filteredNotifications.length}</span>}
                                 </div>
                                 <div className="notification-list bg-black my-5 mx-auto border-white border-2">
-                                    {notifications.map((notification, index) => (
+                                    {filteredNotifications.map((notification, index) => (
                                         <div key={index}
                                              className="notification-item text-wrap text-center bg-black rounded-5 mb-1 w-100 my-2 border-white text-wrap">
                                             <i className="fa fa-warning text-danger"></i><span

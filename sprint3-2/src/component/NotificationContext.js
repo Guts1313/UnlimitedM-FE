@@ -1,20 +1,23 @@
-import React, {createContext, useCallback, useContext, useEffect, useRef, useState} from 'react';
 import SockJS from 'sockjs-client';
-import {Client} from '@stomp/stompjs';
+import { Client } from '@stomp/stompjs';
 import axios from "axios";
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
+import { useAuth } from './AuthContext';
 
 const NotificationContext = createContext();
 
 export const useNotifications = () => useContext(NotificationContext);
+
 const isTokenValid = (token) => {
     return true;
 };
+
 const refreshAccessToken = async (refreshToken) => {
     try {
         const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', { refreshToken });
         if (response.status === 200) {
             localStorage.setItem('accessToken', response.data.accessToken);
-            localStorage.setItem('refreshToken',response.data.refreshToken)
+            localStorage.setItem('refreshToken', response.data.refreshToken);
             return response.data.accessToken;
         }
     } catch (error) {
@@ -22,10 +25,11 @@ const refreshAccessToken = async (refreshToken) => {
         throw error;
     }
 };
-export const NotificationProvider = ({children}) => {
+
+export const NotificationProvider = ({ children }) => {
+    const { queueChannels } = useAuth();
     const [notifications, setNotifications] = useState([]);
     const [isConnected, setIsConnected] = useState(false);
-    const [subscribedChannels, setSubscribedChannels] = useState(new Set());
     const clientRef = useRef(null);
 
     const connectWebSocket = useCallback(async (token) => {
@@ -39,6 +43,11 @@ export const NotificationProvider = ({children}) => {
             onConnect: () => {
                 console.log('Connected to WebSocket server');
                 setIsConnected(true);
+                if (queueChannels && queueChannels.length > 0) {
+                    queueChannels.forEach(channel => subscribeToChannel(channel, handleQueueMessage));
+                } else {
+                    console.log('No queue channels to subscribe to.');
+                }
             },
             onDisconnect: () => {
                 console.log('Disconnected from WebSocket server');
@@ -52,7 +61,7 @@ export const NotificationProvider = ({children}) => {
 
         stompClient.activate();
         clientRef.current = stompClient;
-    }, []);
+    }, [queueChannels]);
 
     const reconnectWebSocket = useCallback(async () => {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -77,21 +86,20 @@ export const NotificationProvider = ({children}) => {
         }
     }, [connectWebSocket]);
 
-
-
-
     const subscribeToChannel = (destination, callback) => {
         try {
-            if (clientRef.current && isConnected && !subscribedChannels.has(destination)) {
+            if (clientRef.current && isConnected) {
                 clientRef.current.subscribe(destination, callback);
-                setSubscribedChannels(prev => new Set(prev).add(destination));
             }
         } catch (error) {
-            console.log("Subscription failed", error.message)
+            console.log("Subscription failed", error.message);
             reconnectWebSocket().catch(console.error);
         }
+    };
 
-
+    const handleQueueMessage = (message) => {
+        const notification = JSON.parse(message.body);
+        setNotifications((prevNotifications) => [...prevNotifications, notification]);
     };
 
     return (
@@ -108,6 +116,10 @@ export const NotificationProvider = ({children}) => {
         </NotificationContext.Provider>
     );
 };
+
+
+
+
 // const NotificationContext = createContext();
 //
 // export const useNotifications = () => useContext(NotificationContext);

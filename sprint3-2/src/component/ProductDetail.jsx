@@ -6,47 +6,28 @@ import SockJS from 'sockjs-client';
 import '../assets/ProductDetail.css';
 import {useNotifications} from "./NotificationContext";
 import async from "async";
+import {useAuth} from "./AuthContext";
 
 function ProductDetail() {
     const [product, setProduct] = useState({});
     const [latestBid, setLatestBid] = useState(null);
-    const {id} = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
     const [bidAmount, setBidAmount] = useState('');
-    const {isConnected, setNotifications, subscribeToChannel, clientRef, connectWebSocket} = useNotifications();
+    const { isConnected, setNotifications, subscribeToChannel, clientRef, connectWebSocket } = useNotifications();
     const [isSubscribedToOutbid, setIsSubscribedToOutbid] = useState(false);
     const [isSubscribedToUpdates, setIsSubscribedToUpdates] = useState(false);
-
-    // useEffect(() => {
-    //     const token = localStorage.getItem('accessToken');
-    //     connectWebSocket(token);
-    // }, [id]);
 
     useEffect(() => {
         if (clientRef.current && !isSubscribedToUpdates) {
             subscribeToProductUpdates();
+            subscribeToNotifications();
             setIsSubscribedToUpdates(true);
             fetchProductAndLatestBid();
         } else {
-            console.log("Already subscribed to updates")
+            console.log("Already subscribed to updates");
         }
     }, [clientRef.current]);
-
-    // const connectWebSocket = (token) => {
-    //     const socket = new SockJS(`http://localhost:8080/websocket-sockjs-stomp?access_token=${encodeURIComponent(token)}`);
-    //     const stompClient = new Client({
-    //         webSocketFactory: () => socket,
-    //         onConnect: () => {
-    //             console.log('Connected to WebSocket server');
-    //             subscribeToProductUpdates();
-    //         },
-    //         onDisconnect: () => console.log('Disconnected from WebSocket server'),
-    //         onStompError: (error) => console.error('WebSocket Error:', error.headers['message']),
-    //     });
-    //
-    //     stompClient.activate();
-    //     clientRef.current = stompClient;
-    // };
 
     const subscribeToProductUpdates = () => {
         subscribeToChannel(`/topic/product${id}`, (message) => {
@@ -64,62 +45,45 @@ function ProductDetail() {
             setIsSubscribedToOutbid(true);
         }
     };
-
     const fetchProductAndLatestBid = async () => {
         await refreshAccess();
-        const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
+        const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
         try {
-            const productResponse = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/${id}`, {headers});
+            const productResponse = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/${id}`, { headers });
             setProduct(productResponse.data.productEntity);
-            const bidResponse = await axios.get(`http://localhost:8080/bids/latest/${id}`, {headers});
+            const bidResponse = await axios.get(`http://localhost:8080/bids/latest/${id}`, { headers });
             setLatestBid(bidResponse.data.bidAmount);
         } catch (error) {
             console.error('Error fetching product details or latest bid:', error);
             navigate('/login');
         }
     };
-    const refreshAccess = async () => {
 
-        const tokenPayload = localStorage.getItem('refreshToken')
+    const refreshAccess = async () => {
+        const tokenPayload = localStorage.getItem('refreshToken');
         const headers = {
             refreshToken: tokenPayload
-        }
+        };
         try {
             if (!isConnected) {
-                const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', {headers});
+                const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', { headers });
                 if (response.data && response) {
-                    console.log('Refresh func hit')
                     localStorage.setItem('accessToken', response.data.accessToken);
                     localStorage.setItem('refreshToken', response.data.refreshToken);
-                    console.log('Successfully setting new access token....', response.data.accessToken)
-                    console.log('Successfully setting new access token....', response.data.refreshToken)
-                    console.log('Successfully refreshed tokens....')
-
-                    try {
-                        setTimeout(() => {
-                            connectWebSocket(response.data.accessToken);
-                            console.log('Attempting to re-connect to web-socket....')
-                        }, 3000)
-
-                    } catch (err) {
-                        console.log('Error in re-connection', err)
-                    }
-
-
+                    setTimeout(() => {
+                        connectWebSocket(response.data.accessToken);
+                    }, 3000);
                 } else {
-                    console.log('Error has occurred.', response.data)
+                    console.log('Error has occurred.', response.data);
                 }
             } else {
-                console.log('Socket is active :). No re-connect attempts will be made')
+                console.log('Socket is active :). No re-connect attempts will be made');
             }
-
-        } catch
-            (error) {
-            console.log("Error in refreshing...", error)
+        } catch (error) {
+            console.log("Error in refreshing...", error);
         }
+    };
 
-
-    }
     const handleBid = (e) => {
         e.preventDefault();
         if (clientRef.current && clientRef.current.connected && bidAmount) {
@@ -138,31 +102,6 @@ function ProductDetail() {
             console.error("WebSocket connection is not active or bid amount is empty.");
         }
     };
-    // const handleBid = (e) => {
-    //     e.preventDefault();
-    //     if (clientRef.current && clientRef.current.connected && bidAmount) {
-    //         const bidRequest = {
-    //             productId: id,
-    //             bidAmount: parseFloat(bidAmount),
-    //             userId: localStorage.getItem('userId')
-    //         };
-    //         clientRef.current.publish({
-    //             destination: '/app/placeBid',
-    //             body: JSON.stringify(bidRequest),
-    //             skipContentLengthHeader: true
-    //         });
-    //         subscribeToNotifications();  // Subscribe to notifications after placing a bid
-    //
-    //         // Notify MyBids component
-    //         clientRef.current.publish({
-    //             destination: `/user/queue/user-bids/${localStorage.getItem('userId')}`,
-    //             body: JSON.stringify(bidRequest),
-    //             skipContentLengthHeader: true
-    //         });
-    //     } else {
-    //         console.error("WebSocket connection is not active or bid amount is empty.");
-    //     }
-    // };
 
 
     return (

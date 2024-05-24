@@ -1,11 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Lottie from "lottie-react";
 import testanimation from '../assets/testanimation.json';
 import loginsuccessanimation from '../assets/loginsuccessanimation.json';
 import axios from 'axios'; // First, ensure Axios is imported at the top of your file
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { useNotifications } from './NotificationContext';
+import {useNotifications} from './NotificationContext';
+import { useAuth } from './AuthContext';
+import data from "bootstrap/js/src/dom/data";
+import {jwtDecode} from 'jwt-decode';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 function Login() {
@@ -19,9 +22,147 @@ function Login() {
     const navigate = useNavigate();
     const { connectWebSocket } = useNotifications();
     const [isRegistered, setIsRegistered] = useState(false);
-    const [showAnimation, setShowAnimation] = useState(false);
     const [showLoginSuccessAnimation, setShowLoginSuccessAnimation] = useState(false);
     const [showRegistrationSuccessAnimation, setShowRegistrationSuccessAnimation] = useState(false);
+    const{setAlreadySubscribedChannels,setIsAuthenticated} = useAuth();
+
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setError('');
+        try {
+            await onLogin(username, password);
+            setShowLoginSuccessAnimation(true);
+            setTimeout(()=>{
+                setShowLoginSuccessAnimation(false)
+            },3000)
+            setTimeout(()=>{
+                navigate('/')
+            },3000);
+
+            // setTimeout(() => setShowLoginSuccessAnimation(false), 5000);
+        } catch (error) {
+            setError('Failed to login: ' + (error.response?.data?.message || error.message));
+            setShowLoginSuccessAnimation(false);
+
+        }
+    };
+
+
+    const onLogin = async (username, password) => {
+        try {
+            const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/login', {
+                username,
+                passwordHash: password
+            });
+
+            if (response && response.data) {
+                localStorage.setItem('accessToken', response.data.accessToken);
+                localStorage.setItem('refreshToken', response.data.refreshToken);
+                localStorage.setItem('userId', response.data.userId);
+                const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
+
+                const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, { headers });
+
+                if (getSubscribedChannelsResponse.data) {
+                    const channels = getSubscribedChannelsResponse.data;
+                    const channelsSet = new Set(channels);
+                    setAlreadySubscribedChannels(channelsSet);
+                    connectWebSocket(response.data.accessToken);
+                } else {
+                    connectWebSocket(response.data.accessToken);
+                }
+
+                // Decode the token to get user roles
+                const decodedToken = jwtDecode(response.data.accessToken);
+                const roles = decodedToken.roles || [];
+                const isAdmin = roles.includes('ROLE_ADMIN');
+
+                setIsAuthenticated(true);
+
+                if (isAdmin) {
+                    setTimeout(()=>{
+                        navigate('/admin-panel');
+
+                    },5500)
+                } else {
+                    console.log('Regular user login');
+                }
+            } else {
+                throw new Error('Invalid server response');
+            }
+        } catch (error) {
+            console.error('Login failed:', error);
+            setError('Failed to login: ' + (error.response?.data?.message || error.message));
+        }
+    };
+
+
+
+    // const onLogin = async (username, password) => {
+    //     try {
+    //         const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/login', {
+    //             username,
+    //             passwordHash: password
+    //         });
+    //         if (response && response.data) {
+    //             localStorage.setItem('accessToken', response.data.accessToken);
+    //             localStorage.setItem('refreshToken', response.data.refreshToken);
+    //             localStorage.setItem('userId', response.data.userId);
+    //             const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
+    //
+    //             const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, { headers });
+    //             console.log('sub response data:',data)
+    //
+    //             if (getSubscribedChannelsResponse.data) {
+    //                 console.log('sub response data:',data)
+    //                 const channels = getSubscribedChannelsResponse.data;
+    //                 const channelsSet = new Set(channels);
+    //                 setAlreadySubscribedChannels(channelsSet);
+    //                 connectWebSocket(response.data.accessToken);
+    //             } else {
+    //                 connectWebSocket(response.data.accessToken);
+    //             }
+    //             setIsAuthenticated(true);
+    //             setTimeout(()=>
+    //             {
+    //                 navigate('/')
+    //             },3000)
+    //         } else {
+    //             throw new Error('Invalid server response');
+    //         }
+    //     } catch (error) {
+    //         console.error('Login failed:', error);
+    //         setError('Failed to login: ' + (error.response?.data?.message || error.message));
+    //     }
+    // };
+
+
+
+    const handleRegister = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.post('http://localhost:8080/unlimitedmarketplace', {
+                userName: name,
+                email: email,
+                passwordHash: signupPassword,
+                role:"USER"
+            });
+
+            console.log("Respnse:", response.data)
+            if (response.status === 201) {
+                setShowRegistrationSuccessAnimation(true);
+                setTimeout(() => setShowRegistrationSuccessAnimation(false), 5000);
+            } else {
+                const errorData = await response.json();
+                setError('Failed to register: ' + errorData.message);
+            }
+        } catch (error) {
+            setError('Failed to register: ' + error.message);
+            setShowRegistrationSuccessAnimation(false);
+        }
+    };
+
     const togglePanelStyle = {
         position: 'absolute',
         width: '200%',
@@ -149,70 +290,7 @@ function Login() {
         transform: isActive ? 'translateX(-100%)' : 'none',
     });
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        setError('');
-        try {
-            await onLogin(username, password);
-            setShowLoginSuccessAnimation(true);
-            setTimeout(() => setShowLoginSuccessAnimation(false), 5000);
-        } catch (error) {
-            setError('Failed to login: ' + (error.response?.data?.message || error.message));
-            setShowLoginSuccessAnimation(false);
-        }
-    };
 
-    const onLogin = async (username, password) => {
-        try {
-            const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/login', {
-                username,
-                passwordHash: password
-            });
-            if (response && response.data) {
-                localStorage.setItem('accessToken', response.data.accessToken);
-                localStorage.setItem('refreshToken', response.data.refreshToken);
-                localStorage.setItem('userId', response.data.userId);
-                // Establish WebSocket connection after successful login
-                connectWebSocket(response.data.accessToken);
-                setShowLoginSuccessAnimation(true);
-                setTimeout(() => {
-                    setShowLoginSuccessAnimation(false);
-                    navigate('/');
-                }, 3000);
-            } else {
-                throw new Error('Invalid server response');
-            }
-        } catch (error) {
-            console.error('Login failed:', error);
-            setError('Failed to login: ' + (error.response?.data?.message || error.message));
-            setShowLoginSuccessAnimation(false);
-        }
-    };
-
-
-    const handleRegister = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.post('http://localhost:8080/unlimitedmarketplace', {
-                userName: name,
-                email: email,
-                passwordHash: signupPassword,
-                role:"USER"
-            });
-
-            console.log("Respnse:", response.data)
-            if (response.status === 201) {
-                setShowRegistrationSuccessAnimation(true);
-                setTimeout(() => setShowRegistrationSuccessAnimation(false), 5000);
-            } else {
-                const errorData = await response.json();
-                setError('Failed to register: ' + errorData.message);
-            }
-        } catch (error) {
-            setError('Failed to register: ' + error.message);
-            setShowRegistrationSuccessAnimation(false);
-        }
-    };
 
 
     return (
