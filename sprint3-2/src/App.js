@@ -12,7 +12,8 @@ import UserProfile from "./component/UserProfile";
 import MyBids from "./component/MyBids";
 import SecurityPage from "./component/SecurityPage";
 import AdminPanel from "./component/AdminPanel";
-
+import {AuthProvider} from "./component/AuthContext";
+import PaymentPanel from "./component/PaymentPanel";
 
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
                         isRefreshing = true;
                         const refreshToken = localStorage.getItem('refreshToken');
                         try {
-                            const res = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', { refreshToken });
+                            const res = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', {refreshToken});
                             if (res.status === 200) {
                                 localStorage.setItem('accessToken', res.data.accessToken);
                                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;
@@ -66,7 +67,7 @@ function App() {
                         }
                     }
                     return new Promise((resolve, reject) => {
-                        failedQueue.push({ resolve, reject });
+                        failedQueue.push({resolve, reject});
                     }).then(token => {
                         originalRequest.headers['Authorization'] = 'Bearer ' + token;
                         return axios(originalRequest);
@@ -80,24 +81,27 @@ function App() {
     );
 
 
-
     return (
-        <Router>
-            <Navbar/>
+        <>
+            <Navbar />
             <Routes>
-                <Route path="/" element={<Home/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/products" element={<Products/>}/>
-                <Route path="/product/:id" element={<ProductDetail/>}/>
-                <Route path="/listing" element={<AddListing/>}/>
-                <Route path="/profile" element={<UserProfile/>}/>
-                <Route path="/my-bids" element={<MyBids/>}/> {/* Add this line */}
-                <Route path="/user-security" element={<SecurityPage/>}/> {/* Add this line */}
-                <Route path="/admin-panel" element={<AdminPanel/>}/> {/* Add this line */}
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
+                <Route path="/listing" element={<AddListing />} />
+                <Route path="/profile" element={<UserProfile />} />
+                <Route path="/my-bids" element={<MyBids />} />
+                <Route path="/user-security" element={<SecurityPage />} />
+                <Route path="/admin-panel" element={<AdminPanel />} />
+                <Route path="/payment-panel" element={<PaymentPanel />} />
             </Routes>
-        </Router>
+        </>
     );
 }
+
+
+
 
 
 export default App;

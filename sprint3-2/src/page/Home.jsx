@@ -36,9 +36,20 @@ const Home = () => {
     const subscribeToNotifications = (id) => {
         subscribeToChannel(`/user/queue/outbid${id}`, (message) => {
             const notification = JSON.parse(message.body);
-            setNotifications((prevNotifications) => [...prevNotifications, notification]);
+            setNotifications((prevNotifications) => {
+                // Check if the notification already exists in the state
+                const notificationExists = prevNotifications.some(
+                    (notif) => notif === notification
+                );
+                // Only add the notification if it does not already exist
+                if (!notificationExists) {
+                    return [...prevNotifications, notification];
+                }
+                return prevNotifications;
+            });
         });
     };
+
 
     const refreshAccess = async () => {
         const tokenPayload = localStorage.getItem('refreshToken');

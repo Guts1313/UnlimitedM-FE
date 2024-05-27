@@ -6,7 +6,7 @@ import axios from 'axios'; // First, ensure Axios is imported at the top of your
 import {useNavigate, useParams} from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {useNotifications} from './NotificationContext';
-import { useAuth } from './AuthContext';
+import {useAuth} from './AuthContext';
 import data from "bootstrap/js/src/dom/data";
 import {jwtDecode} from 'jwt-decode';
 
@@ -20,11 +20,11 @@ function Login() {
     const [email, setEmail] = useState('');
     const [signupPassword, setSignupPassword] = useState('');
     const navigate = useNavigate();
-    const { connectWebSocket } = useNotifications();
+    const {connectWebSocket, subscribeToChannel, setNotifications} = useNotifications();
     const [isRegistered, setIsRegistered] = useState(false);
     const [showLoginSuccessAnimation, setShowLoginSuccessAnimation] = useState(false);
     const [showRegistrationSuccessAnimation, setShowRegistrationSuccessAnimation] = useState(false);
-    const{setAlreadySubscribedChannels,setIsAuthenticated} = useAuth();
+    const { setAlreadySubscribedChannels, setIsAuthenticated, alreadySubscribedChannels, setIsSubbedToUpdates } = useAuth();
 
 
     const handleSubmit = async (event) => {
@@ -33,12 +33,12 @@ function Login() {
         try {
             await onLogin(username, password);
             setShowLoginSuccessAnimation(true);
-            setTimeout(()=>{
+            setTimeout(() => {
                 setShowLoginSuccessAnimation(false)
-            },3000)
-            setTimeout(()=>{
+            }, 3000)
+            setTimeout(() => {
                 navigate('/')
-            },3000);
+            }, 3000);
 
             // setTimeout(() => setShowLoginSuccessAnimation(false), 5000);
         } catch (error) {
@@ -48,6 +48,20 @@ function Login() {
         }
     };
 
+
+    const extractQueueIds = (channels) => {
+        const queueRegex = /\/queue\/outbid(\d+)/;
+        const extractedIds = new Set();
+
+        channels.forEach(channel => {
+            const match = channel.match(queueRegex);
+            if (match && match[1]) {
+                extractedIds.add(match[1]);
+            }
+        });
+
+        return extractedIds;
+    };
 
     const onLogin = async (username, password) => {
         try {
@@ -64,14 +78,18 @@ function Login() {
 
                 const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, { headers });
 
+                let channelsSet = new Set();
                 if (getSubscribedChannelsResponse.data) {
                     const channels = getSubscribedChannelsResponse.data;
-                    const channelsSet = new Set(channels);
-                    setAlreadySubscribedChannels(channelsSet);
-                    connectWebSocket(response.data.accessToken);
-                } else {
-                    connectWebSocket(response.data.accessToken);
+                    channelsSet = extractQueueIds(channels);
+                    console.log('Channels received from server to resub to:', channelsSet);
                 }
+
+                connectWebSocket(response.data.accessToken);
+
+                setTimeout(async () => {
+                    await subscribeToNotifications(channelsSet);
+                }, 5000);
 
                 // Decode the token to get user roles
                 const decodedToken = jwtDecode(response.data.accessToken);
@@ -81,10 +99,9 @@ function Login() {
                 setIsAuthenticated(true);
 
                 if (isAdmin) {
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         navigate('/admin-panel');
-
-                    },5500)
+                    }, 5500);
                 } else {
                     console.log('Regular user login');
                 }
@@ -95,6 +112,23 @@ function Login() {
             console.error('Login failed:', error);
             setError('Failed to login: ' + (error.response?.data?.message || error.message));
         }
+    };
+
+    const subscribeToNotifications = async (channelsSet) => {
+        const alreadySubscribedChannelsCopy = new Set(alreadySubscribedChannels);
+        channelsSet.forEach((id) => {
+            const channel = `/user/queue/outbid${id}`;
+            if (!alreadySubscribedChannelsCopy.has(channel)) {
+                subscribeToChannel(channel, (message) => {
+                    const notification = JSON.parse(message.body);
+                    console.log('Notification received from server:', notification);
+                    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+                });
+                alreadySubscribedChannelsCopy.add(channel);
+            }
+        });
+        setAlreadySubscribedChannels(alreadySubscribedChannelsCopy);
+        setIsSubbedToUpdates(true);
     };
 
 
@@ -138,7 +172,6 @@ function Login() {
     // };
 
 
-
     const handleRegister = async (event) => {
         event.preventDefault();
         try {
@@ -146,7 +179,7 @@ function Login() {
                 userName: name,
                 email: email,
                 passwordHash: signupPassword,
-                role:"USER"
+                role: "USER"
             });
 
             console.log("Respnse:", response.data)
@@ -176,7 +209,7 @@ function Login() {
         top: 0,
         transition: 'all 0.6s ease-in-out',
         background: 'linear-gradient(to right, rgb(255 255 255 / 0%), rgb(18 18 37 / 97%))',
-        left:'-100%',
+        left: '-100%',
         transform: 'translateX(0)'
 
     };
@@ -201,7 +234,7 @@ function Login() {
         width: '768px',
         maxWidth: '100%',
         minHeight: '480px',
-        backdropFilter:'blur(10px)'
+        backdropFilter: 'blur(10px)'
     };
 
     const formStyleSignIn = {
@@ -231,7 +264,7 @@ function Login() {
         borderRadius: '8px',
         width: '100%',
         outline: 'none',
-        color:'white'
+        color: 'white'
     };
     const handleToggleActive = () => {
         setIsActive(!isActive); // Toggle the active state to switch forms
@@ -246,8 +279,8 @@ function Login() {
         textTransform: 'uppercase',
         marginTop: '10px',
         cursor: 'pointer',
-        border:'2px solid rgba(255, 255, 255, 0.59)',
-        borderRadius:`15px`
+        border: '2px solid rgba(255, 255, 255, 0.59)',
+        borderRadius: `15px`
     };
     const buttonStyleGhost = {
         background: 'linear-gradient(45deg, #000000, #000439)',
@@ -259,8 +292,8 @@ function Login() {
         letterSpacing: '0.5px',
         textTransform: 'uppercase',
         cursor: 'pointer',
-        transform:'translateX(110%)',
-        border:`2px solid rgba(255, 255, 255, 0.59)`
+        transform: 'translateX(110%)',
+        border: `2px solid rgba(255, 255, 255, 0.59)`
     };
     const formContainerStyle = (isActive, position) => ({
         position: 'absolute',
@@ -291,15 +324,13 @@ function Login() {
     });
 
 
-
-
     return (
         <div style={containerStyle} className={"container"} id="container">
             {showRegistrationSuccessAnimation && (
                 <div style={{
-                    display:'flex',
-                    justifyContent:'center',
-                    alignItems:'center',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     width: '300px',
                     height: '300px',
                     position: 'absolute',
@@ -329,9 +360,12 @@ function Login() {
                 <form style={formStyle} onSubmit={handleRegister}>
                     <h1>Create Account</h1>
                     <span>or use your email for registration</span>
-                    <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)} style={inputStyle}/>
-                    <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle}/>
-                    <input type="password" placeholder="Password" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} style={inputStyle}/>
+                    <input type="text" placeholder="Name" value={name} onChange={e => setName(e.target.value)}
+                           style={inputStyle}/>
+                    <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)}
+                           style={inputStyle}/>
+                    <input type="password" placeholder="Password" value={signupPassword}
+                           onChange={e => setSignupPassword(e.target.value)} style={inputStyle}/>
                     <button type="submit" style={buttonStyle}>Sign Up</button>
                 </form>
             </div>
@@ -342,7 +376,8 @@ function Login() {
                     <div className="social-icons">
                     </div>
                     <span>or use your email password</span>
-                    <input type="username" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)}
+                    <input type="username" placeholder="Username" value={username}
+                           onChange={e => setUsername(e.target.value)}
                            style={inputStyle}/>
                     <input type="password" placeholder="Password" value={password}
                            onChange={e => setPassword(e.target.value)} style={inputStyle}/>

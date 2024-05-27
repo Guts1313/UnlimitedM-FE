@@ -11,23 +11,24 @@ import {useAuth} from "./AuthContext";
 function ProductDetail() {
     const [product, setProduct] = useState({});
     const [latestBid, setLatestBid] = useState(null);
-    const { id } = useParams();
+    const {id} = useParams();
     const navigate = useNavigate();
     const [bidAmount, setBidAmount] = useState('');
-    const { isConnected, setNotifications, subscribeToChannel, clientRef, connectWebSocket } = useNotifications();
+    const {isConnected, setNotifications, subscribeToChannel, clientRef, connectWebSocket} = useNotifications();
     const [isSubscribedToOutbid, setIsSubscribedToOutbid] = useState(false);
     const [isSubscribedToUpdates, setIsSubscribedToUpdates] = useState(false);
+    const {isSubbedToUpdates} = useAuth();
 
     useEffect(() => {
         if (clientRef.current && !isSubscribedToUpdates) {
             subscribeToProductUpdates();
-            subscribeToNotifications();
             setIsSubscribedToUpdates(true);
             fetchProductAndLatestBid();
         } else {
-            console.log("Already subscribed to updates");
+            console.log("Already subscribed to updates")
         }
     }, [clientRef.current]);
+
 
     const subscribeToProductUpdates = () => {
         subscribeToChannel(`/topic/product${id}`, (message) => {
@@ -37,53 +38,75 @@ function ProductDetail() {
     };
 
     const subscribeToNotifications = () => {
-        if (!isSubscribedToOutbid) {
-            subscribeToChannel(`/user/queue/outbid${id}`, (message) => {
-                const notification = JSON.parse(message.body);
-                setNotifications((prevNotifications) => [...prevNotifications, notification]);
-            });
-            setIsSubscribedToOutbid(true);
+        try {
+            if (!isSubscribedToOutbid && !isSubbedToUpdates) {
+                subscribeToChannel(`/user/queue/outbid${id}`, (message) => {
+                    const notification = JSON.parse(message.body);
+                    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+                });
+                setIsSubscribedToOutbid(true);
+            }
+        }catch (err){
+            console.log('Error in subscribing to queue channel')
         }
+
     };
+
     const fetchProductAndLatestBid = async () => {
         await refreshAccess();
-        const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
+        const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
         try {
-            const productResponse = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/${id}`, { headers });
+            const productResponse = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/${id}`, {headers});
             setProduct(productResponse.data.productEntity);
-            const bidResponse = await axios.get(`http://localhost:8080/bids/latest/${id}`, { headers });
+            const bidResponse = await axios.get(`http://localhost:8080/bids/latest/${id}`, {headers});
             setLatestBid(bidResponse.data.bidAmount);
         } catch (error) {
             console.error('Error fetching product details or latest bid:', error);
             navigate('/login');
         }
     };
-
     const refreshAccess = async () => {
-        const tokenPayload = localStorage.getItem('refreshToken');
+
+        const tokenPayload = localStorage.getItem('refreshToken')
         const headers = {
             refreshToken: tokenPayload
-        };
+        }
         try {
             if (!isConnected) {
-                const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', { headers });
+                const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', {headers});
                 if (response.data && response) {
+                    console.log('Refresh func hit')
                     localStorage.setItem('accessToken', response.data.accessToken);
                     localStorage.setItem('refreshToken', response.data.refreshToken);
-                    setTimeout(() => {
-                        connectWebSocket(response.data.accessToken);
-                    }, 3000);
+                    console.log('Successfully setting new access token....', response.data.accessToken)
+                    console.log('Successfully setting new access token....', response.data.refreshToken)
+                    console.log('Successfully refreshed tokens....')
+
+                    try {
+                        setTimeout(() => {
+                            connectWebSocket(response.data.accessToken);
+                            console.log('Attempting to re-connect to web-socket....')
+                        }, 3000)
+
+                    } catch (err) {
+                        console.log('Error in re-connection', err)
+                    }
+
+
                 } else {
-                    console.log('Error has occurred.', response.data);
+                    console.log('Error has occurred.', response.data)
                 }
             } else {
-                console.log('Socket is active :). No re-connect attempts will be made');
+                console.log('Socket is active :). No re-connect attempts will be made')
             }
-        } catch (error) {
-            console.log("Error in refreshing...", error);
-        }
-    };
 
+        } catch
+            (error) {
+            console.log("Error in refreshing...", error)
+        }
+
+
+    }
     const handleBid = (e) => {
         e.preventDefault();
         if (clientRef.current && clientRef.current.connected && bidAmount) {
@@ -102,7 +125,6 @@ function ProductDetail() {
             console.error("WebSocket connection is not active or bid amount is empty.");
         }
     };
-
 
     return (
         <div className="product-detail-container container-fluid vh-100 m-0 p-0 d-flex flex-nowrap">

@@ -59,7 +59,25 @@ html{
   background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
   backdrop-filter: blur(10px);
 }
+.swiper {
+  width: 500px !important;
+  height: 400px !important;
+  padding: 50px !important;
+}
+.swiper-slide {
+  background-position: center !important;
+  background-size: cover !important;
+  width: 400px !important;
+  height: 400px !important;
+}
 
+.swiper-slide img {
+  display: block !important;
+  width: 100% !important;
+  box-shadow: 1px 0px 13px 7px white;
+  border-radius: 15px;
+  height: 300px;
+}
 .backdrop {
   z-index: 1055; /* Just below the sidebar but above everything else */
 }

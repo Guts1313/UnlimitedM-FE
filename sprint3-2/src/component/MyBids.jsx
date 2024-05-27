@@ -63,7 +63,7 @@ const MyBids = () => {
         <div className="container-fluid vh-100 w-100 mh-100 bg-gradient rounded-5 border-top border-danger  overflow-hidden d-flex">
             <SideNav />
             <div className="vh-100 w-100  rounded-5 border-danger px-5 py-0 overflow-scroll">
-                <h2 className="text-white d-flex justify-content-center bg-black  rounded-4 mb-0 fw-bold"><i className={"fa fa-table py-1 px-3 text-success"}></i>My Bids</h2>
+                <h2 className="text-white d-flex justify-content-center bg-black  rounded-4 mb-0 fw-bold"><i className={"fa fa-table py-1 px-3 text-success"}></i>User {localStorage.getItem('userId')}'s bids</h2>
                 <div className="d-flex justify-content-between my-3">
                     <div>
                         <label className="text-white me-2">Sort By:</label>
@@ -81,24 +81,24 @@ const MyBids = () => {
                         </select>
                     </div>
                 </div>
-                <table className="table table-responsive table-responsive-md  table-dark table-bordered border-danger vh-100 overflow-auto">
-                    <thead className="table-active rounded-5">
-                    <tr>
-                        <th className="text-danger table-active">Product Name</th>
-                        <th className="text-danger table-active">Bid Amount</th>
-                        <th className="text-danger table-active">Status</th>
-                        <th className="text-danger table-active">Date</th>
+                <table className="container-sm table table-responsive-sm  table-dark table-bordered border-danger vh-100 overflow-hidden">
+                    <thead className="table-active rounded-5 table-responsive-sm">
+                    <tr className={"overflow-scroll table-responsive-sm"}>
+                        <th className="text-danger table-active table-responsive-sm">Product Name</th>
+                        <th className="text-danger table-active table-responsive-sm">Bid Amount</th>
+                        <th className="text-danger table-active table-responsive-sm">Status</th>
+                        <th className="text-danger table-active table-responsive-sm">Date</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody className={"container-sm table-responsive-sm"}>
                     {filteredBids.map(bid => (
                         <tr key={bid.id}>
-                            <td className="fs-5">
+                            <td className="fs-5 table-responsive-sm">
                                 <img src={bid.product.productUrl} height={100} width={100} className="rounded-3" /> {bid.product.productName}
                             </td>
-                            <td className="fs-5">{bid.amount}<i className="fa fa-eur text-success fs-5"></i></td>
-                            <td className="fs-5"><i className="fa fa-dot-circle-o bg-black bg-gradient text-success fs-3 rounded-5"></i>{bid.status}</td>
-                            <td className="fs-5">{new Date(bid.bidTime).toLocaleString()}</td>
+                            <td className="fs-5 table-responsive-sm">{bid.amount}<i className="fa fa-eur text-success fs-5"></i></td>
+                            <td className="fs-5 table-responsive-sm"><i className="fa fa-dot-circle-o bg-black bg-gradient text-success fs-3 rounded-5"></i>{bid.status}</td>
+                            <td className="fs-5 table-responsive-sm">{new Date(bid.bidTime).toLocaleString()}</td>
                         </tr>
                     ))}
                     </tbody>
