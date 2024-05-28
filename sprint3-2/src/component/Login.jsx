@@ -87,8 +87,8 @@ function Login() {
 
                 connectWebSocket(response.data.accessToken);
 
-                setTimeout(async () => {
-                    await subscribeToNotifications(channelsSet);
+                setTimeout(() => {
+                    subscribeToNotifications(channelsSet);
                 }, 5000);
 
                 // Decode the token to get user roles
@@ -114,7 +114,7 @@ function Login() {
         }
     };
 
-    const subscribeToNotifications = async (channelsSet) => {
+    const subscribeToNotifications = (channelsSet) => {
         const alreadySubscribedChannelsCopy = new Set(alreadySubscribedChannels);
         channelsSet.forEach((id) => {
             const channel = `/user/queue/outbid${id}`;

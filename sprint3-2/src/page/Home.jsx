@@ -36,20 +36,9 @@ const Home = () => {
     const subscribeToNotifications = (id) => {
         subscribeToChannel(`/user/queue/outbid${id}`, (message) => {
             const notification = JSON.parse(message.body);
-            setNotifications((prevNotifications) => {
-                // Check if the notification already exists in the state
-                const notificationExists = prevNotifications.some(
-                    (notif) => notif === notification
-                );
-                // Only add the notification if it does not already exist
-                if (!notificationExists) {
-                    return [...prevNotifications, notification];
-                }
-                return prevNotifications;
-            });
+            setNotifications((prevNotifications) => [...prevNotifications, notification]);
         });
     };
-
 
     const refreshAccess = async () => {
         const tokenPayload = localStorage.getItem('refreshToken');
@@ -73,50 +62,47 @@ const Home = () => {
         }
     };
 
-
-
-return (
-    <div>
+    return (
         <div>
-            <div className="card text-white">
-                <img
-                    src="https://images.wallpaperscraft.com/image/single/sneakers_spray_reflection_166141_1920x1080.jpg"
-                    height="540px" width="200px" className="card-img" alt="..."/>
-                <div
-                    className="card-img-overlay d-flex justify-content-start align-items-center flex-column align-self-end">
-                    <h5 className="card-title text-bg-danger text-center rounded-2 bg-gradient fw-bold fs-1">Welcome
-                        to the latest sneaker heaven!</h5>
-                    <p className="card-text text-bg-light text-danger-emphasis text-center rounded-2 fw-bold fs-4 align-self-center">Buy
-                        or Sell all the HOT sneaker models on even HOTTER prices</p>
-                    <Link to="/login"
-                          className='text-danger fw-bold fs-4 text-white text-decoration-none'>
-                        <button className="btn btn-outline-danger bg-black"><i
-                            className="fa fa-user-plus"/> Join Now!
-                        </button>
-                    </Link>
-                </div>
-            </div>
-            <div className="card mb-3">
-                <div className="row g-0">
-                    <div className="col-md-4">
-                        <img
-                            src="https://cdn.dribbble.com/users/1117956/screenshots/4532749/jordan_square_gif_042918.gif"
-                            className="img-fluid rounded-start" alt="..."/>
+            <div>
+                <div className="card text-white">
+                    <img
+                        src="https://images.wallpaperscraft.com/image/single/sneakers_spray_reflection_166141_1920x1080.jpg"
+                        height="540px" width="200px" className="card-img" alt="..."/>
+                    <div
+                        className="card-img-overlay d-flex justify-content-start align-items-center flex-column align-self-end">
+                        <h5 className="card-title text-bg-danger text-center rounded-2 bg-gradient fw-bold fs-1">Welcome
+                            to the latest sneaker heaven!</h5>
+                        <p className="card-text text-bg-light text-danger-emphasis text-center rounded-2 fw-bold fs-4 align-self-center">Buy
+                            or Sell all the HOT sneaker models on even HOTTER prices</p>
+                        <Link to="/login"
+                              className='text-danger fw-bold fs-4 text-white text-decoration-none'>
+                            <button className="btn btn-outline-danger bg-black"><i
+                                className="fa fa-user-plus"/> Join Now!
+                            </button>
+                        </Link>
                     </div>
-                    <div className="col-md-8">
-                        <div className="card-body">
-                            <h5 className="card-title-sec">Shop all the sneakers you can imagine</h5>
-                            <p className="card-text">At UMX you can shop.</p>
-                            <p className="card-text"><small>Last updated 3 mins ago</small>
-                            </p>
+                </div>
+                <div className="card mb-3">
+                    <div className="row g-0">
+                        <div className="col-md-4">
+                            <img
+                                src="https://cdn.dribbble.com/users/1117956/screenshots/4532749/jordan_square_gif_042918.gif"
+                                className="img-fluid rounded-start" alt="..."/>
+                        </div>
+                        <div className="col-md-8">
+                            <div className="card-body">
+                                <h5 className="card-title-sec">Shop all the sneakers you can imagine</h5>
+                                <p className="card-text">At UMX you can shop.</p>
+                                <p className="card-text"><small>Last updated 3 mins ago</small>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
-    </div>
-);
+    );
 }
 
 export default Home;

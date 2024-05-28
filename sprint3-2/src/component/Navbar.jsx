@@ -10,11 +10,30 @@ function Navbar() {
     const { notifications, clearNotifications,setNotifications } = useNotifications();
     const { isAuthenticated, setIsAuthenticated,handleLogout} = useAuth();
     const navigate = useNavigate();
-
+    const [uniqueNotifications, setUniqueNotifications] = useState(new Set());
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
 
+    const setNotifcToInitialStateAndLogout =async () => {
+        await  setNotifications([]);
+        handleLogout();
+    }
+
+    useEffect(() => {
+        console.log('Notifications:', notifications);
+    }, [notifications]);
+
+    const renderNotificationItem = (notification) => (
+        <div key={notification.id}
+             className="notification-item text-wrap text-center bg-black rounded-5 mb-1 w-100 my-2 border-white text-wrap">
+            <i className="fa fa-warning text-danger"></i>
+            <span className="text-white text-wrap"> You were outbid! </span>
+            <br/>
+            <span className="text-white text-wrap">Highest bid: {notification}</span>
+            <i className="fa fa-dollar text-bg-black rounded-1 fs-6 p-1"></i>
+        </div>
+    );
 
 
     return (
@@ -69,7 +88,7 @@ function Navbar() {
                                 </div>
                             </div>
                             {isAuthenticated ? (
-                                <button onClick={handleLogout} className="btn text-white fw-bold" type="button">
+                                <button onClick={setNotifcToInitialStateAndLogout} className="btn text-white fw-bold" type="button">
                                     <i className="fa fa-sign-out text-danger p-1"></i>Logout
                                 </button>
                             ) : (

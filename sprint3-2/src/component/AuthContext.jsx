@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
 import { refreshAccessToken } from './TokenUtils';
 import axios from "axios";
+import {useNotifications} from "./NotificationContext";
 
 const AuthContext = createContext();
 
@@ -12,6 +13,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate();
     const [alreadySubscribedChannels, setAlreadySubscribedChannels] = useState(new Set());
     const[isSubbedToUpdates,setIsSubbedToUpdates] = useState(false);
+
     const isTokenValid = (token) => {
         try {
             const decodedToken = jwtDecode(token);

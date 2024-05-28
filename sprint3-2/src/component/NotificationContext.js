@@ -138,6 +138,7 @@ export const NotificationProvider = ({ children }) => {
     const [isConnected, setIsConnected] = useState(false);
     const clientRef = useRef(null);
 
+
     const connectWebSocket = useCallback(async (token) => {
         if (!isTokenValid(token)) {
             console.log("Attempting to refresh token before connecting...");
@@ -149,6 +150,7 @@ export const NotificationProvider = ({ children }) => {
             onConnect: () => {
                 console.log('Connected to WebSocket server');
                 setIsConnected(true);
+                // Trigger subscriptions here
                 if (queueChannels && queueChannels.length > 0) {
                     queueChannels.forEach(channel => subscribeToChannel(channel, handleQueueMessage));
                 } else {
@@ -168,6 +170,7 @@ export const NotificationProvider = ({ children }) => {
         stompClient.activate();
         clientRef.current = stompClient;
     }, [queueChannels]);
+
 
     const reconnectWebSocket = useCallback(async () => {
         const refreshToken = localStorage.getItem('refreshToken');
@@ -192,6 +195,7 @@ export const NotificationProvider = ({ children }) => {
         }
     }, [connectWebSocket]);
 
+
     const subscribeToChannel = (destination, callback) => {
         try {
             if (clientRef.current && isConnected) {
@@ -206,9 +210,11 @@ export const NotificationProvider = ({ children }) => {
     const handleQueueMessage = (message) => {
         const notification = JSON.parse(message.body);
         setNotifications((prevNotifications) => {
+            // Check if the notification already exists in the state
             const notificationExists = prevNotifications.some(
                 (notif) => notif === notification
             );
+            // Only add the notification if it does not already exist
             if (!notificationExists) {
                 return [...prevNotifications, notification];
             }
@@ -219,6 +225,7 @@ export const NotificationProvider = ({ children }) => {
     const clearNotifications = () => {
         setNotifications([]);
     };
+
 
     return (
         <NotificationContext.Provider value={{
