@@ -21,6 +21,7 @@ function ProductDetail() {
     useEffect(() => {
         if (isConnected) {
             fetchProductAndLatestBid();
+            subscribeToProductUpdates();
         }
     }, [isConnected, isSubbedToUpdates]);
 
@@ -28,7 +29,7 @@ function ProductDetail() {
         setIsSubbedToUpdates(true);
         setTimeout(()=>{
             subscribeToNotifications()
-            subscribeToProductUpdates();
+
         },3500);
     };
 

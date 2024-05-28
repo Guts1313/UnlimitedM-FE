@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import {jwtDecode} from 'jwt-decode';
 import { refreshAccessToken } from './TokenUtils';
 import axios from "axios";
-import {useNotifications} from "./NotificationContext";
 
 const AuthContext = createContext();
 
@@ -63,14 +62,6 @@ export const AuthProvider = ({ children }) => {
             console.error('Logout failed:', error);
         }
     };
-    // const setAlreadySubscribedChannels = (channelsSet) => {
-    //     const channels = Array.from(channelsSet);
-    //     const productChannels = channels.filter(channel => channel.startsWith('/topic/product'));
-    //     const ids = productChannels.map(channel => channel.replace('/topic/product', ''));
-    //     setProductIds(ids);
-    //     console.log('Trigger before subbedChannels in authcontext');
-    //     localStorage.setItem('subbedChannels', JSON.stringify(channels));
-    // };
 
     return (
         <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, alreadySubscribedChannels,productIds, setAlreadySubscribedChannels,isSubbedToUpdates,setIsSubbedToUpdates, handleLogout }}>

@@ -7,16 +7,14 @@ import axios from "axios";
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
-    const { notifications, clearNotifications,setNotifications } = useNotifications();
-    const { isAuthenticated, setIsAuthenticated,handleLogout} = useAuth();
-    const navigate = useNavigate();
-    const [uniqueNotifications, setUniqueNotifications] = useState(new Set());
+    const { notifications,setNotifications } = useNotifications();
+    const { isAuthenticated,handleLogout} = useAuth();
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
     };
 
-    const setNotifcToInitialStateAndLogout =async () => {
-        await  setNotifications([]);
+    const setNotifcToInitialStateAndLogout = () => {
+        setNotifications([]);
         handleLogout();
     }
 
@@ -73,6 +71,7 @@ function Navbar() {
                                 </div>
                                 <div className="notification-list bg-black my-5 mx-auto border-white border-2">
                                     {notifications.map((notification, index) => (
+
                                         <div key={index}
                                              className="notification-item text-wrap text-center bg-black rounded-5 mb-1 w-100 my-2 border-white text-wrap">
                                             <i className="fa fa-warning text-danger"></i><span

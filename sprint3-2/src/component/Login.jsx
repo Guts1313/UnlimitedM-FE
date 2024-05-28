@@ -3,11 +3,10 @@ import Lottie from "lottie-react";
 import testanimation from '../assets/testanimation.json';
 import loginsuccessanimation from '../assets/loginsuccessanimation.json';
 import axios from 'axios'; // First, ensure Axios is imported at the top of your file
-import {useNavigate, useParams} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import {useNotifications} from './NotificationContext';
 import {useAuth} from './AuthContext';
-import data from "bootstrap/js/src/dom/data";
 import {jwtDecode} from 'jwt-decode';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -21,10 +20,14 @@ function Login() {
     const [signupPassword, setSignupPassword] = useState('');
     const navigate = useNavigate();
     const {connectWebSocket, subscribeToChannel, setNotifications} = useNotifications();
-    const [isRegistered, setIsRegistered] = useState(false);
     const [showLoginSuccessAnimation, setShowLoginSuccessAnimation] = useState(false);
     const [showRegistrationSuccessAnimation, setShowRegistrationSuccessAnimation] = useState(false);
-    const { setAlreadySubscribedChannels, setIsAuthenticated, alreadySubscribedChannels, setIsSubbedToUpdates } = useAuth();
+    const {
+        setAlreadySubscribedChannels,
+        setIsAuthenticated,
+        alreadySubscribedChannels,
+        setIsSubbedToUpdates
+    } = useAuth();
 
 
     const handleSubmit = async (event) => {
@@ -74,9 +77,9 @@ function Login() {
                 localStorage.setItem('accessToken', response.data.accessToken);
                 localStorage.setItem('refreshToken', response.data.refreshToken);
                 localStorage.setItem('userId', response.data.userId);
-                const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
+                const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
 
-                const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, { headers });
+                const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, {headers});
 
                 let channelsSet = new Set();
                 if (getSubscribedChannelsResponse.data) {
@@ -122,54 +125,23 @@ function Login() {
                 subscribeToChannel(channel, (message) => {
                     const notification = JSON.parse(message.body);
                     console.log('Notification received from server:', notification);
-                    setNotifications((prevNotifications) => [...prevNotifications, notification]);
+                    setNotifications((prevNotifications) => {
+                        const notificationExists = prevNotifications.some(
+                            (notif) => notif === notification
+                        );
+                        if (!notificationExists) {
+                            return [...prevNotifications, notification];
+                        }
+                        return prevNotifications;
+                    });
                 });
+
                 alreadySubscribedChannelsCopy.add(channel);
             }
         });
         setAlreadySubscribedChannels(alreadySubscribedChannelsCopy);
         setIsSubbedToUpdates(true);
     };
-
-
-
-    // const onLogin = async (username, password) => {
-    //     try {
-    //         const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/login', {
-    //             username,
-    //             passwordHash: password
-    //         });
-    //         if (response && response.data) {
-    //             localStorage.setItem('accessToken', response.data.accessToken);
-    //             localStorage.setItem('refreshToken', response.data.refreshToken);
-    //             localStorage.setItem('userId', response.data.userId);
-    //             const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
-    //
-    //             const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, { headers });
-    //             console.log('sub response data:',data)
-    //
-    //             if (getSubscribedChannelsResponse.data) {
-    //                 console.log('sub response data:',data)
-    //                 const channels = getSubscribedChannelsResponse.data;
-    //                 const channelsSet = new Set(channels);
-    //                 setAlreadySubscribedChannels(channelsSet);
-    //                 connectWebSocket(response.data.accessToken);
-    //             } else {
-    //                 connectWebSocket(response.data.accessToken);
-    //             }
-    //             setIsAuthenticated(true);
-    //             setTimeout(()=>
-    //             {
-    //                 navigate('/')
-    //             },3000)
-    //         } else {
-    //             throw new Error('Invalid server response');
-    //         }
-    //     } catch (error) {
-    //         console.error('Login failed:', error);
-    //         setError('Failed to login: ' + (error.response?.data?.message || error.message));
-    //     }
-    // };
 
 
     const handleRegister = async (event) => {
