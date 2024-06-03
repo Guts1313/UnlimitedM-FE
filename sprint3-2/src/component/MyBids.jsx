@@ -60,7 +60,7 @@ const MyBids = () => {
     };
 
     return (
-        <div className="container-fluid vh-100 w-100 mh-100 bg-gradient rounded-5 border-top border-danger  overflow-hidden d-flex">
+        <div className="container-fluid vh-100 w-100 mh-100 rounded-5 border-top border-danger  overflow-hidden d-flex">
             <SideNav />
             <div className="vh-100 w-100  rounded-5 border-danger px-5 py-0 overflow-scroll">
                 <h2 className="text-white d-flex justify-content-center bg-black  rounded-4 mb-0 fw-bold"><i className={"fa fa-table py-1 px-3 text-success"}></i>User {localStorage.getItem('userId')}'s bids</h2>

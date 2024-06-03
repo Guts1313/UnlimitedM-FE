@@ -16,6 +16,8 @@ const isTokenValid = (token) => {
 export const NotificationProvider = ({ children }) => {
     const { queueChannels } = useAuth();
     const [notifications, setNotifications] = useState([]);
+    const [winnerNotification, setWinnerNotification] = useState();
+
     const [isConnected, setIsConnected] = useState(false);
     const clientRef = useRef(null);
 
@@ -111,6 +113,7 @@ export const NotificationProvider = ({ children }) => {
     return (
         <NotificationContext.Provider value={{
             notifications,
+            winnerNotification,setWinnerNotification,
             clientRef,
             setNotifications,
             isConnected,

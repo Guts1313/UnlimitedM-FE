@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../assets/AddListing.css'
 import axios from "axios";
 
@@ -33,6 +33,7 @@ const AddListing = () => {
             productPrice: parseFloat(productPrice),
             productUrl: productUrl,
             productDateCreated: productDateCreated,
+            userId:localStorage.getItem('userId')
         };
 
         try {
@@ -54,11 +55,20 @@ const AddListing = () => {
     };
 
 
+    useEffect(() => {
+        setProductUrl(productUrl);
+    }, [productUrl]);
+
+    const containerStyle = {
+        backgroundImage: `url(${productUrl})`,
+        backgroundSize: 'cover', // Ensure the background covers the entire container
+        backgroundPosition: 'center', // Center the background image
+    };
 
     return (
             <div className="main-listing container-fluid w-100 m-0 p-0  d-flex justify-content-center">
                 <div
-                    className="image-placeholder-container h-50 w-50 bg-black d-inline-flex align-self-center justify-content-center flex-grow-1 flex-shrink-0">
+                    className="image-placeholder-container h-50 w-50 bg-black d-inline-flex align-self-center justify-content-center flex-grow-1 flex-shrink-0" style={containerStyle}>
                     <i className="fa fa-cloud-upload text-white fs-3 align-content-center"><span
                         className="text-danger">Images go here</span></i>
                 </div>

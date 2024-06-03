@@ -8,6 +8,8 @@ import {useNotifications} from "./NotificationContext";
 import async from "async";
 import {useAuth} from "./AuthContext";
 import {refreshAccessToken} from './TokenUtils';
+import Lottie from "lottie-react";
+import auctionwinner from '../assets/auctionwinner.json'
 
 function ProductDetail() {
     const [product, setProduct] = useState({});
@@ -15,8 +17,17 @@ function ProductDetail() {
     const {id} = useParams();
     const navigate = useNavigate();
     const [bidAmount, setBidAmount] = useState('');
-    const {isConnected, setNotifications, subscribeToChannel, clientRef, connectWebSocket} = useNotifications();
+    const {
+        isConnected,
+        setNotifications,
+        subscribeToChannel,
+        clientRef,
+        connectWebSocket,
+        winnerNotification,
+        setWinnerNotification
+    } = useNotifications();
     const {isSubbedToUpdates, setIsSubbedToUpdates} = useAuth();
+    const [showWinnerAnimation, setShowWinnerAnimation] = useState(false);
 
     useEffect(() => {
         if (isConnected) {
@@ -27,10 +38,10 @@ function ProductDetail() {
 
     const subscribeToAllChannels = () => {
         setIsSubbedToUpdates(true);
-        setTimeout(()=>{
+        setTimeout(() => {
             subscribeToNotifications()
-
-        },3500);
+            subscribeToWinnersQueue()
+        }, 3500);
     };
 
     const subscribeToProductUpdates = () => {
@@ -39,6 +50,28 @@ function ProductDetail() {
             setLatestBid(bidData.bidAmount);
             localStorage.setItem(`subscribedToProductUpdates${id}`, 'true');
         });
+    };
+    const subscribeToWinnersQueue = () => {
+        subscribeToChannel(`/user/queue/winner${id}`, (message) => {
+            const notification = JSON.parse(message.body);
+            setWinnerNotification(notification);
+            setTimeout(() => {
+                setShowWinnerAnimation(true);
+                setTimeout(() => {
+                    setShowWinnerAnimation(false);
+                }, 5000); // Hide the animation after 5 seconds
+            }, 3000); // Show the animation after 3 seconds
+        });
+    };
+
+
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: auctionwinner,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
     };
 
     const subscribeToNotifications = () => {
@@ -102,9 +135,10 @@ function ProductDetail() {
         <div className="product-detail-container container-fluid vh-100 m-0 p-0 d-flex flex-nowrap">
             <div className="product-info-card w-100 mx-0 d-flex">
                 <div className="product-img-container">
-                    <img src={product.productUrl} height="580px" alt={product.productName}/>
+                    <img className={"container-fluid justify-content-center"} src={product.productUrl} height="420px"
+                         style={{borderRadius: 15}} alt={product.productName}/>
                 </div>
-                <div className="product-description mx-2 text-white bg-dark d-flex flex-column">
+                <div className="product-description mx-2 text-white bg-dark d-flex flex-column" style={{height: 430}}>
                     <div
                         className="product-description-text d-flex flex-column justify-content-center align-items-center mx-4">
                         <h1>{product.productName}</h1>
@@ -138,10 +172,24 @@ function ProductDetail() {
                     </div>
                 </div>
             </div>
+            {showWinnerAnimation && (
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: '300px',
+                    height: '300px',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: '9999'
+                }}>
+                    <Lottie animationData={auctionwinner} loop={false} />
+                </div>
+            )}
         </div>
     );
 }
 
 export default ProductDetail;
-
-

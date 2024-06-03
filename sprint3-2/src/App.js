@@ -14,6 +14,8 @@ import SecurityPage from "./component/SecurityPage";
 import AdminPanel from "./component/AdminPanel";
 import {AuthProvider} from "./component/AuthContext";
 import PaymentPanel from "./component/PaymentPanel";
+import MyListings from "./component/MyListings";
+import LiveView from "./component/LiveView";
 
 
 function App() {
@@ -95,6 +97,9 @@ function App() {
                 <Route path="/user-security" element={<SecurityPage />} />
                 <Route path="/admin-panel" element={<AdminPanel />} />
                 <Route path="/payment-panel" element={<PaymentPanel />} />
+                <Route path="/my-listings" element={<MyListings />} />
+                <Route path="/liveview/:id" element={<LiveView />} />
+
             </Routes>
         </>
     );

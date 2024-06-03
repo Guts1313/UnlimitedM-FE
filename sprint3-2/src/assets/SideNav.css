@@ -7,8 +7,8 @@
     max-height: 92.5%;
     margin-left: -0.6rem!important;
     background: url("https://i.pinimg.com/originals/9f/d0/27/9fd0273e36cceb3cdec689552647e5a5.gif");
-    box-shadow: inset -3px 1px 10px 0px #6b1c26;
-
+    box-shadow: inset -3px 1px 22px 5px rgb(56, 2, 2);
+    backdrop-filter: contrast(10) !important;
 }
 .rounded-4{
     box-shadow: inset 2px 0px 9px red !important;
