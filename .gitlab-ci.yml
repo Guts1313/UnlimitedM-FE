@@ -11,18 +11,18 @@ services:
   - docker:dind
 
 before_script:
-  - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
-  - pwsh -Command '[System.Convert]::FromBase64String((Get-Content -Raw -Path $Env:HOME\gcloud-service-key.b64)) | Set-Content -Path $Env:HOME\gcloud-service-key.json -Encoding Byte'
+  - echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/gcloud-service-key.json
   - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
   - gcloud config set project $PROJECT_ID
   - gcloud auth configure-docker
   - gcloud services enable artifactregistry.googleapis.com
   - gcloud services enable run.googleapis.com
 
+
 build:
   stage: build
   script:
-    - pwsh -Command 'bash build_and_push.sh'
+    - bash build_and_push.sh
   tags:
     - docker
   only:
