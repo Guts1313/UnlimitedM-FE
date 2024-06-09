@@ -4,14 +4,14 @@ FROM node:14-alpine as build
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json files from the sprin3-2 directory
-COPY sprin3-2/package*.json ./
+# Copy package.json and package-lock.json files
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install
 
-# Copy all other files from the sprin3-2 directory
-COPY sprin3-2/ .
+# Copy all other files
+COPY . .
 
 # Build the React app
 RUN npm run build
@@ -27,6 +27,7 @@ EXPOSE 80
 
 # Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
 
 
 
