@@ -7,29 +7,43 @@ variables:
   REGION: europe-north1
   GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
 
-services:
-  - docker:dind
-
-before_script:
-    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
-    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
-    - gcloud config set project $PROJECT_ID
-    - gcloud services enable artifactregistry.googleapis.com
-    - gcloud auth configure-docker
-
 build:
   stage: build
+  image: node:14
   script:
-    - bash build_and_push.sh
+    - npm install
+    - npm run build
   tags:
     - docker
   only:
     - workbranch
 
+docker_build:
+  stage: docker_build
+  image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $PROJECT_ID
+    - gcloud services enable artifactregistry.googleapis.com
+    - gcloud auth configure-docker
+    - cd C:/Users/acidburn/Desktop/sem3FE/sem3-fe/sprint3-2
+  script:
+    - docker build -t gcr.io/$PROJECT_ID/sem3-fe:latest -f Dockerfile .
+    - docker push gcr.io/$PROJECT_ID/sem3-fe:latest
+  tags:
+    - docker
+
 deploy:
   stage: deploy
+  image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $PROJECT_ID
+    - gcloud services enable run.googleapis.com
   script:
-    - bash deploy.sh
+    - gcloud run deploy sem3-fe-frontend --image gcr.io/$PROJECT_ID/sem3-fe:latest --region $REGION --platform managed --allow-unauthenticated
   tags:
     - docker
   only:
