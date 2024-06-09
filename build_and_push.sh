@@ -18,7 +18,8 @@ docker build -t ${IMAGE_NAME}:${TAG} .
 docker tag ${IMAGE_NAME}:${TAG} gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
 
 # Authenticate with Google Cloud
-echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath ${HOME}/gcloud-service-key.b64 -Encoding ascii
+[System.Convert]::FromBase64String((Get-Content -Raw -Path ${HOME}/gcloud-service-key.b64)) | Set-Content -Path ${HOME}/gcloud-service-key.json -Encoding Byte
 gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
 gcloud auth configure-docker
 
