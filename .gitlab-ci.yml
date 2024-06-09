@@ -11,6 +11,11 @@ services:
   - docker:dind
 
 before_script:
+  # Install Python
+  - pwsh -Command 'Invoke-WebRequest https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe -OutFile python-3.9.5-amd64.exe'
+  - pwsh -Command 'Start-Process python-3.9.5-amd64.exe -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -NoNewWindow -Wait'
+  - pwsh -Command 'Remove-Item python-3.9.5-amd64.exe'
+
   # Install Google Cloud SDK
   - pwsh -Command 'Invoke-WebRequest https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -OutFile google-cloud-sdk.zip'
   - pwsh -Command 'Expand-Archive google-cloud-sdk.zip -DestinationPath $Env:USERPROFILE'
