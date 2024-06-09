@@ -57,6 +57,7 @@ deploy:
   script:
     - BACKEND_URL=$(gcloud run services describe unlimitedmarketplace-backend --platform managed --region $REGION --format="value(status.url)")
     - gcloud run deploy sem3-fe-frontend --image gcr.io/$PROJECT_ID/sem3-fe:latest --region $REGION --platform managed --allow-unauthenticated --update-env-vars "REACT_APP_BACKEND_URL=$BACKEND_URL"
+    - gcloud run services add-iam-policy-binding sem3-fe-frontend --region=$REGION --member="allUsers" --role="roles/run.invoker"
   tags:
     - docker
   only:
