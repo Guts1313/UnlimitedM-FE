@@ -32,7 +32,7 @@ function LiveView() {
         const token = localStorage.getItem('accessToken');
         const headers = { Authorization: `Bearer ${token}` };
         try {
-            const response = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/${id}`, { headers });
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/products/${id}`, { headers });
             const productData = response.data.productEntity;
             setProduct(productData);
             fetchLatestBid();
@@ -46,7 +46,7 @@ function LiveView() {
     const fetchLatestBid = async () => {
         const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
         try {
-            const response = await axios.get(`http://localhost:8080/bids/latest/${id}`, { headers });
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/bids/latest/${id}`, { headers });
             setLatestBid(response.data.bidAmount);
         } catch (error) {
             console.error('Error fetching latest bid:', error);

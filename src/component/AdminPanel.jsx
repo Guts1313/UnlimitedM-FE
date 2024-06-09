@@ -30,7 +30,7 @@ const AdminPanel = () => {
         try {
             const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
 
-            const response = await axios.get('http://localhost:8080/adminpanel/users', { headers });
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/adminpanel/users`, { headers });
 
             console.log('Response data:', response.data);
 
@@ -50,7 +50,7 @@ const AdminPanel = () => {
     const handleDeleteUser = async (userId) => {
         try {
             const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
-            const response = await axios.delete(`http://localhost:8080/adminpanel/users/${userId}`, { headers });
+            const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/adminpanel/users/${userId}`, { headers });
             setUsers(users.filter(user => user.id !== userId));
         } catch (error) {
             console.error('Error deleting user:', error);

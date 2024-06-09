@@ -14,7 +14,7 @@ const MyBids = () => {
         const userId = localStorage.getItem('userId');
         const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
         try {
-            const response = await axios.get(`http://localhost:8080/bids/user-bids/${userId}`, { headers });
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/bids/user-bids/${userId}`, { headers });
             setBidProducts(response.data.userBidProducts || []);
         } catch (error) {
             console.error('Error fetching user bids:', error);
