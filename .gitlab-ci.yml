@@ -11,6 +11,8 @@ services:
   - docker:dind
 
 before_script:
+  # Ensure gcloud is available in PATH
+  - pwsh -Command 'if (-Not ($Env:Path -contains "$Env:USERPROFILE\google-cloud-sdk\bin")) { $Env:Path += ";$Env:USERPROFILE\google-cloud-sdk\bin" }'
   # Authenticate with Google Cloud
   - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
   - pwsh -Command '[System.Convert]::FromBase64String((Get-Content -Raw -Path $Env:HOME\gcloud-service-key.b64)) | ForEach-Object { $_ } | Set-Content -Path $Env:HOME\gcloud-service-key.json -AsByteStream'
@@ -19,6 +21,7 @@ before_script:
   - pwsh -Command 'gcloud auth configure-docker'
   - pwsh -Command 'gcloud services enable artifactregistry.googleapis.com'
   - pwsh -Command 'gcloud services enable run.googleapis.com'
+
 build:
   stage: build
   script:
@@ -27,4 +30,14 @@ build:
     - docker
   only:
     - workbranch
+
+deploy:
+  stage: deploy
+  script:
+    - bash deploy.sh
+  tags:
+    - docker
+  only:
+    - workbranch
+
 
