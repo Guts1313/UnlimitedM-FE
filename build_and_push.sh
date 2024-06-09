@@ -9,18 +9,13 @@ PROJECT_ID="unlimitedmarketplace"
 REGION="europe-north1"
 
 # Navigate to project directory
-cd "$(dirname "$0")/sem3-fe"
+cd "$(dirname "$0")"
 
 # Build the Docker image
 docker build -t ${IMAGE_NAME}:${TAG} .
 
 # Tag the Docker image
 docker tag ${IMAGE_NAME}:${TAG} gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
-
-# Authenticate with Google Cloud
-echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/gcloud-service-key.json
-gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
-gcloud auth configure-docker
 
 # Push the Docker image to Google Container Registry
 docker push gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
@@ -33,3 +28,4 @@ gcloud run deploy ${IMAGE_NAME} \
   --allow-unauthenticated
 
 set +ex
+
