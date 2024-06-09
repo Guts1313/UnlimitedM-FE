@@ -15,10 +15,9 @@ build_and_test:
   stage: build_and_test
   image: node:14-alpine
   before_script:
-    - Remove-Item -Recurse -Force node_modules, package-lock.json
+    - rm -rf node_modules package-lock.json
   script:
     - npm install
-    - npm install babel-plugin-polyfill-corejs3
     - npm audit fix --force
     - npm run build
   artifacts:
@@ -26,8 +25,7 @@ build_and_test:
       - build
   tags:
     - docker
-  only:
-    - workbranch
+
 docker_build:
   stage: docker_build
   image: google/cloud-sdk:latest

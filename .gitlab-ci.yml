@@ -15,7 +15,7 @@ build_and_test:
   stage: build_and_test
   image: node:14-alpine
   before_script:
-    - Remove-Item -Recurse -Force node_modules, package-lock.json
+    - rm -rf node_modules package-lock.json
   script:
     - npm install
     - npm audit fix --force
