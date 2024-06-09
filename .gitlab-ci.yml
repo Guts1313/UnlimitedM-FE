@@ -11,15 +11,6 @@ services:
   - docker:dind
 
 before_script:
-  # Check if Python is installed, install if not
-  - pwsh -Command 'if (-Not (Get-Command python -ErrorAction SilentlyContinue)) { Invoke-WebRequest https://www.python.org/ftp/python/3.9.5/python-3.9.5-amd64.exe -OutFile python-3.9.5-amd64.exe; Start-Process python-3.9.5-amd64.exe -ArgumentList "/quiet InstallAllUsers=1 PrependPath=1" -NoNewWindow -Wait; Remove-Item python-3.9.5-amd64.exe }'
-
-  # Check if Google Cloud SDK is installed, install if not
-  - pwsh -Command 'if (-Not (Get-Command gcloud -ErrorAction SilentlyContinue)) { Invoke-WebRequest https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -OutFile google-cloud-sdk.zip; Expand-Archive google-cloud-sdk.zip -DestinationPath $Env:USERPROFILE -Force; Remove-Item google-cloud-sdk.zip; cmd /c "$Env:USERPROFILE\google-cloud-sdk\install.bat" }'
-
-  # Add Google Cloud SDK to PATH
-  - pwsh -Command '$env:PATH += ";$Env:USERPROFILE\google-cloud-sdk\bin"'
-
   # Authenticate with Google Cloud
   - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
   - pwsh -Command '[System.Convert]::FromBase64String((Get-Content -Raw -Path $Env:HOME\gcloud-service-key.b64)) | ForEach-Object { $_ } | Set-Content -Path $Env:HOME\gcloud-service-key.json -AsByteStream'
@@ -28,8 +19,6 @@ before_script:
   - pwsh -Command 'gcloud auth configure-docker'
   - pwsh -Command 'gcloud services enable artifactregistry.googleapis.com'
   - pwsh -Command 'gcloud services enable run.googleapis.com'
-
-
 
 build:
   stage: build
