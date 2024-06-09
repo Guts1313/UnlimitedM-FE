@@ -11,14 +11,6 @@ variables:
 services:
   - docker:dind
 
-before_script:
-  - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
-  - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
-  - gcloud config set project $PROJECT_ID
-  - gcloud services enable artifactregistry.googleapis.com
-  - gcloud auth configure-docker
-  - gcloud services enable run.googleapis.com
-
 build:
   stage: build
   image: node:14
@@ -36,8 +28,12 @@ build:
 docker_build:
   stage: docker_build
   image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $PROJECT_ID
+    - gcloud auth configure-docker
   script:
-    - cd build
     - docker build -t gcr.io/$PROJECT_ID/sem3-fe:latest -f Dockerfile .
     - docker push gcr.io/$PROJECT_ID/sem3-fe:latest
   tags:
@@ -48,6 +44,12 @@ docker_build:
 deploy:
   stage: deploy
   image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $PROJECT_ID
+    - gcloud auth configure-docker
+    - gcloud services enable run.googleapis.com
   script:
     - BACKEND_URL=$(gcloud run services describe unlimitedmarketplace-backend --platform managed --region $REGION --format="value(status.url)")
     - gcloud run deploy sem3-fe-frontend --image gcr.io/$PROJECT_ID/sem3-fe:latest --region $REGION --platform managed --allow-unauthenticated --update-env-vars "REACT_APP_BACKEND_URL=$BACKEND_URL"
