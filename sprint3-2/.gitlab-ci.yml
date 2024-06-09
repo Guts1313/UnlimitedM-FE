@@ -15,12 +15,11 @@ build_and_test:
   stage: build_and_test
   image: node:14-alpine
   script:
-    - cd sprin3-2
     - npm install
     - npm run build
   artifacts:
     paths:
-      - sprin3-2/build
+      - build
   tags:
     - docker
 

@@ -1,0 +1,31 @@
+.side-navigation.container-fluid {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 25% !important;
+    min-width: 200px!important;
+    max-width: 10% !important;
+    max-height: 92.5%;
+    margin-left: -0.6rem!important;
+    background: url("https://i.pinimg.com/originals/9f/d0/27/9fd0273e36cceb3cdec689552647e5a5.gif");
+    box-shadow: inset -3px 1px 22px 5px rgb(56, 2, 2);
+    backdrop-filter: contrast(10) !important;
+}
+.rounded-4{
+    box-shadow: inset 2px 0px 9px red !important;
+    border-radius: 100px !important;
+}
+
+.mb-0.align-content-start,.mb-0.align-content-end{
+    min-height: 70px !important;
+    margin-top:-0.5rem !important;
+    min-width: 100% !important;
+    width: 100% !important;
+}
+.mb-0.mb-3{
+    min-width: 103% !important;
+    width: 100% !important;
+    margin-left: -1.3rem!important;
+    margin-top: 0.5rem!important;
+    height: 100px;
+
+}

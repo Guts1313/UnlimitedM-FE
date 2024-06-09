@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ac31b4f4-32ca-431c-92e0-7077352ec8fa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/untitled2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/untitled2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
-    </list>
+    <list default="true" id="099f9b29-b4bf-4a40-aa74-ed40222fab56" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,44 +13,57 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
+        <option value="JavaScript File" />
         <option value="CSS File" />
         <option value="JSX File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 2
+  &quot;associatedIndex&quot;: 6
 }</component>
-  <component name="ProjectId" id="2dtDy6fzVtLvz3u0NowtYtRtXBW" />
+  <component name="ProjectId" id="2fCa7WDYI78nWXlOVdSGYlXt6Fi" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/acidburn/WebstormProjects/unlimitedmarketplace-fe",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "npm.npm start.executor": "Run",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;workbranch&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/acidburn/Downloads/frontend_websockets_starter&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.npm start.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.completion&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\acidburn\\AppData\\Local\\Programs\\WebStorm\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\acidburn\WebstormProjects\unlimited-second\src\assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\acidburn\Desktop\sem3FE\sem3-fe\sprint3-2\src\assets" />
+      <recent name="C:\Users\acidburn\Desktop\sem3FE\sem3-fe\sprint3-2\public" />
+      <recent name="C:\Users\acidburn\Desktop\sem3FE\sem3-fe\sprint3-2\src" />
+      <recent name="C:\Users\acidburn\WebstormProjects\unlimited-second\src\component" />
+      <recent name="C:\Users\acidburn\WebstormProjects\unlimited-second\src\page" />
+    </key>
+  </component>
   <component name="RunManager" selected="npm.npm start">
     <configuration name="Debug Application" type="JavascriptDebugType" uri="http://localhost:3000">
       <method v="2" />
@@ -76,15 +82,37 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ac31b4f4-32ca-431c-92e0-7077352ec8fa" name="Changes" comment="" />
-      <created>1710818732934</created>
+      <changelist id="099f9b29-b4bf-4a40-aa74-ed40222fab56" name="Changes" comment="" />
+      <created>1713307346559</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1710818732934</updated>
-      <workItem from="1710818733948" duration="76000" />
-      <workItem from="1710818814601" duration="590000" />
-      <workItem from="1710819411129" duration="18379000" />
-      <workItem from="1710955163949" duration="13283000" />
+      <updated>1713307346559</updated>
+      <workItem from="1713307347697" duration="13831000" />
+      <workItem from="1713408904632" duration="6789000" />
+      <workItem from="1713738402191" duration="913000" />
+      <workItem from="1713776608178" duration="2975000" />
+      <workItem from="1713783797079" duration="6964000" />
+      <workItem from="1713897557802" duration="1332000" />
+      <workItem from="1713975540926" duration="11531000" />
+      <workItem from="1714943392940" duration="29789000" />
+      <workItem from="1715447389379" duration="126467000" />
+      <workItem from="1715976476856" duration="628000" />
+      <workItem from="1716001544429" duration="20436000" />
+      <workItem from="1716099668135" duration="42869000" />
+      <workItem from="1716219777109" duration="290085000" />
+      <workItem from="1716967192247" duration="8527000" />
+      <workItem from="1717042415047" duration="84000" />
+      <workItem from="1717042504565" duration="550000" />
+      <workItem from="1717043066549" duration="32000" />
+      <workItem from="1717043300827" duration="1006000" />
+      <workItem from="1717048933188" duration="252000" />
+      <workItem from="1717051309082" duration="2000" />
+      <workItem from="1717070551865" duration="2761000" />
+      <workItem from="1717109952602" duration="2246000" />
+      <workItem from="1717359942414" duration="15801000" />
+      <workItem from="1717446165636" duration="28300000" />
+      <workItem from="1717791883409" duration="1271000" />
+      <workItem from="1717876780464" duration="8001000" />
     </task>
     <servers />
   </component>
