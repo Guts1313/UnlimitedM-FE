@@ -15,7 +15,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Stage 1: Serve the app with nginx
+# Stage 2: Serve the app with nginx
 FROM nginx:alpine
 
 # Copy built files from the previous stage
@@ -27,7 +27,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]
-
 
 
 
