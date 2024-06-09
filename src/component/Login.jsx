@@ -68,7 +68,7 @@ function Login() {
 
     const onLogin = async (username, password) => {
         try {
-            const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/login', {
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/auth/login`, {
                 username,
                 passwordHash: password
             });
@@ -79,7 +79,7 @@ function Login() {
                 localStorage.setItem('userId', response.data.userId);
                 const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
 
-                const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, {headers});
+                const getSubscribedChannelsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions/user/${response.data.userId}`, {headers});
 
                 let channelsSet = new Set();
                 if (getSubscribedChannelsResponse.data) {
@@ -147,7 +147,7 @@ function Login() {
     const handleRegister = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/unlimitedmarketplace', {
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace`, {
                 userName: name,
                 email: email,
                 passwordHash: signupPassword,
