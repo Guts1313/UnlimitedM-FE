@@ -1,0 +1,30 @@
+#!/bin/bash
+# Define variables
+IMAGE_NAME="my-frontend"
+TAG=$(git rev-parse --short HEAD)
+PROJECT_ID="your-gcp-project-id"
+REGION="your-gcp-region"
+
+# Navigate to project directory
+cd C:/Users/acidburn/Desktop/sem3FE/sem3-fe/sprint3-2
+
+# Build the Docker image
+docker build -t ${IMAGE_NAME}:${TAG} .
+
+# Tag the Docker image
+docker tag ${IMAGE_NAME}:${TAG} gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
+
+# Authenticate with Google Cloud
+echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+gcloud auth configure-docker
+
+# Push the Docker image to Google Container Registry
+docker push gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
+
+# Deploy the image to Google Cloud Run
+gcloud run deploy ${IMAGE_NAME} \
+  --image gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG} \
+  --region ${REGION} \
+  --platform managed \
+  --allow-unauthenticated
