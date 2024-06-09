@@ -11,12 +11,14 @@ services:
   - docker:dind
 
 before_script:
-  # Install Google Cloud SDK if not available
-  - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
-  - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
-  - gcloud config set project $PROJECT_ID
-  - gcloud services enable artifactregistry.googleapis.com
-  - gcloud auth configure-docker
+  # Authenticate with Google Cloud
+  - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
+  - pwsh -Command '[System.Convert]::FromBase64String((Get-Content -Raw -Path $Env:HOME\gcloud-service-key.b64)) | ForEach-Object { $_ } | Set-Content -Path $Env:HOME\gcloud-service-key.json -AsByteStream'
+  - pwsh -Command 'gcloud auth activate-service-account --key-file $Env:HOME\gcloud-service-key.json'
+  - pwsh -Command 'gcloud config set project $Env:PROJECT_ID'
+  - pwsh -Command 'gcloud auth configure-docker'
+  - pwsh -Command 'gcloud services enable artifactregistry.googleapis.com'
+  - pwsh -Command 'gcloud services enable run.googleapis.com'
 build:
   stage: build
   script:
