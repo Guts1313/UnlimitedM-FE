@@ -18,7 +18,6 @@ build_and_test:
     - Remove-Item -Recurse -Force node_modules, package-lock.json
   script:
     - npm install
-    - npm install babel-plugin-polyfill-corejs3
     - npm audit fix --force
     - npm run build
   artifacts:
@@ -26,8 +25,7 @@ build_and_test:
       - build
   tags:
     - docker
-  only:
-    - workbranch
+
 docker_build:
   stage: docker_build
   image: google/cloud-sdk:latest
