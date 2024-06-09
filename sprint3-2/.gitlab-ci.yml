@@ -1,11 +1,9 @@
 stages:
-  - build_and_test
+  - build
   - docker_build
   - deploy
 
 variables:
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: "tcp://docker:2375"
   PROJECT_ID: unlimitedmarketplace
   REGION: europe-north1
   GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
@@ -13,12 +11,16 @@ variables:
 services:
   - docker:dind
 
-build_and_test:
-  stage: build_and_test
+build:
+  stage: build
   image: node:latest
   script:
+    - cd unlimitedmarketplace-frontend
     - npm install
     - npm run build
+  artifacts:
+    paths:
+      - unlimitedmarketplace-frontend/build
   tags:
     - docker
 
@@ -31,15 +33,15 @@ docker_build:
     - gcloud config set project $PROJECT_ID
     - gcloud services enable artifactregistry.googleapis.com
     - gcloud auth configure-docker
+    - cd unlimitedmarketplace-frontend
   script:
-    - docker build -t gcr.io/$PROJECT_ID/unlimitedmarketplace-fe:latest -f Dockerfile .
-    - docker push gcr.io/$PROJECT_ID/unlimitedmarketplace-fe:latest
+    - docker build -t gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest -f Dockerfile .
+    - docker push gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest
   tags:
     - docker
   only:
     - workbranch
-    
-deploy_frontend:
+deploy:
   stage: deploy
   image: google/cloud-sdk:latest
   before_script:
@@ -47,10 +49,13 @@ deploy_frontend:
     - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
     - gcloud config set project $PROJECT_ID
     - gcloud services enable run.googleapis.com
-    - curl --header "PRIVATE-TOKEN: $CI_JOB_TOKEN" "https://gitlab.com/api/v4/projects/<backend-project-id>/jobs/artifacts/main/raw/backend_url.env?job=deploy" --output backend_url.env
-    - source backend_url.env
   script:
-    - gcloud run deploy unlimitedmarketplace-frontend --image gcr.io/$PROJECT_ID/unlimitedmarketplace-fe:latest --region $REGION --platform managed --allow-unauthenticated --update-env-vars "REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL"
+    - >
+      BACKEND_URL=$(cat backend_url.env | grep REACT_APP_BACKEND_URL | cut -d '=' -f 2) && \
+      echo "Using Backend URL: $BACKEND_URL" && \
+      gcloud run deploy unlimitedmarketplace-frontend --image gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest --region $REGION --platform managed --allow-unauthenticated --update-env-vars "REACT_APP_BACKEND_URL=$BACKEND_URL"
+  dependencies:
+    - deploy  # This makes sure the backend_url.env file from the backend deploy stage is available
   environment:
     name: production
     url: https://unlimitedmarketplace-frontend.$REGION.run.app
