@@ -13,6 +13,8 @@ function LiveView() {
     const { isConnected, subscribeToChannel, connectWebSocket, clientRef } = useNotifications();
     const { isAuthenticated } = useAuth();
     const userId = localStorage.getItem('userId');
+    const [showSoldSign, setSoldSign] = useState(false);
+
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -62,20 +64,20 @@ function LiveView() {
         });
     };
 
-    const acceptBid = async (bidAmount) => {
+    const acceptBid = async (bidAmount,userId) => {
+        setSoldSign(true);
         const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
         console.log(notifications);
         try {
             const payload = {
                 bidAmount: bidAmount,
-                userId: localStorage.getItem('userId')
+                userId: userId
             };
             await clientRef.current.publish({
                 destination: '/app/acceptBid',
                 body: JSON.stringify(payload),
                 skipContentLengthHeader: true
             });
-            alert('Bid accepted successfully!');
         } catch (error) {
             console.error('Error accepting bid:', error);
         }
@@ -108,7 +110,7 @@ function LiveView() {
                             <div key={index} className="item bg-transparent border-bottom h-100 border-danger w-100 align-self-center d-flex text-white p-2 mt-5 rounded mb-5">
                                 <i className={"fa fa-money py-1 text-success px-3"}></i>{notification.message}
                                 <div className={"d-flex mb-2 align-self-baseline align-items-baseline align-content-center justify-content-start h-100 w-25"} style={{ marginTop: -4 }}>
-                                    <button className={"btn btn-outline-danger mb-2 mx-3 d-flex align-self-start"} onClick={() => acceptBid(notification.bidAmount)}>
+                                    <button className={"btn btn-outline-danger mb-2 mx-3 d-flex align-self-start"} onClick={() => acceptBid(notification.bidAmount,notification.userId)}>
                                         <i className={"fa fa-thumbs-up text-success"}><span className={"text-white fw-bold px-1"}>Accept offer</span></i>
                                     </button>
                                     <button className={"btn btn-outline-danger mb-2 mx-2 d-flex align-self-start"}>
@@ -119,6 +121,24 @@ function LiveView() {
                         ))}
                     </div>
                 </div>
+                {showSoldSign && (
+                    <div className={"sold container-fluid w-100 h-100"} style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: '700px',
+                        height: '700px',
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        zIndex: '9999',
+                        backgroundImage: "url('https://fmlsstore.com/cdn/shop/products/1ce432a22cf586cef5ebe26ed9982411e01304c1.jpg?v=1476905941')",
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center'
+                    }}>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -4,29 +4,27 @@ FROM node:14-alpine
 # Set the working directory in the Docker image
 WORKDIR /app
 
-# Copy package.json and potentially package-lock.json
+# Copy package.json and package-lock.json
 COPY package*.json ./
 
-# Check if package.json is present
-RUN ls -la
-
-# Install any needed packages specified in package.json
+# Install dependencies
 RUN npm install
 
-# Copy the rest of the application source code
+# Copy the rest of the application code
 COPY . .
 
-# List files to verify copy
-RUN ls -la
-
-# Build the application
+# Build the React application
 RUN npm run build
 
-# Output for debugging
-RUN ls -la /app
-
-# Stage 2: Serve the app with nginx
+# Use the official Nginx image as the base image for the final stage
 FROM nginx:alpine
-COPY --from=0 /app/build /usr/share/nginx/html
+
+# Copy the build output to the Nginx HTML directory
+COPY --from=build /app/build /usr/share/nginx/html
+
+# Expose port 80
 EXPOSE 80
+
+# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]
+

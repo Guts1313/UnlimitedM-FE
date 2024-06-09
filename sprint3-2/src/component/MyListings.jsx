@@ -6,10 +6,10 @@ import '../assets/MyListings.css'
 import {Link} from "react-router-dom";
 const MyListings = () => {
     const [userListings, setUserListings] = useState([]);
-    const userId  = localStorage.getItem('userId'); // Assuming you have userId in your auth context
+    const [statusFilter, setStatusFilter] = useState('ACTIVE');
+    const userId = localStorage.getItem('userId'); // Assuming you have userId in your auth context
 
     useEffect(() => {
-        console.log(userId);
         const fetchUserListings = async () => {
             try {
                 const headers = {
@@ -32,6 +32,8 @@ const MyListings = () => {
         fetchUserListings();
     }, [userId]);
 
+    const filteredListings = userListings.filter(listing => listing.productStatus === statusFilter);
+
     return (
         <div className={"d-flex w-100 justify-content-center align-items-baseline border-top bg-transparent border-danger rounded-5 border-bottom"}>
             <div className={'cont w-25 border-1 border-danger'}>
@@ -41,28 +43,35 @@ const MyListings = () => {
                 <div className={"d-flex justify-content-center"}>
                     <h1 className={"text-white pb-3"}>My Listings</h1>
                 </div>
-                <table className="container-sm table table-responsive-sm table-borderless border-danger vh-100 overflow-hidden">
-                    <thead className="table-active rounded-5 table-responsive-sm" >
+                <div className="d-flex justify-content-center mb-3">
+                    <label className="text-white me-2 pt-2">Sort by status:</label>
+                    <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
+                            className="form-select w-25">
+                        <option value="ACTIVE">Active</option>
+                        <option value="SOLD">Sold</option>
+                    </select>
+                </div>
+                <table
+                    className="container-sm table table-responsive-sm table-borderless border-danger vh-100 overflow-hidden">
+                    <thead className="table-active rounded-5 table-responsive-sm">
                     <tr className={"table-responsive-sm border-bottom border-danger"}>
-                        <th className="text-danger table-active ">Product Name</th>
+                        <th className="text-danger table-active">Product Name</th>
                         <th className="text-danger table-active">Product Price</th>
                         <th className="text-danger table-active">Date Added</th>
+                        <th className="text-danger table-active">Status</th>
                         <th className="text-danger table-active"><i className={"fa fa-eye text-white fs-4 px-5 mx-2"}></i></th>
-
                     </tr>
                     </thead>
                     <tbody>
-                    {userListings.map(listing => (
+                    {filteredListings.map(listing => (
                         <tr key={listing.id} className={"rows border-bottom border-danger"}>
                             <td className="fs-5">
-                                <img src={listing.productUrl} height={100} width={100} className="rounded-3"
-                                     alt={listing.productName}/> {listing.productName}
+                                <img src={listing.productUrl} height={100} width={100} className="rounded-3" alt={listing.productName} /> {listing.productName}
                             </td>
-                            <td className="fs-5 align-content-center">{listing.productPrice}<i className="fa fa-eur text-success fs-5"></i>
-                            </td>
-                            <td className="fs- 5 align-content-center">{new Date(listing.productDateAdded).toLocaleString()}</td>
-                            <td className="fs- 5 align-content-center"><Link to={`/liveview/${listing.id}`}><button className={"btn"}><i className={"fa fa-eye fs-5 px-2 text-success fw-bold"}> Live view</i></button></Link></td>
-
+                            <td className="fs-5 align-content-center">{listing.productPrice}<i className="fa fa-eur text-success fs-5"></i></td>
+                            <td className="fs-5 align-content-center">{new Date(listing.productDateAdded).toLocaleString()}</td>
+                            <td className="fs-5 align-content-center">{listing.productStatus}</td>
+                            <td className="fs-5 align-content-center"><Link to={`/liveview/${listing.id}`}><button className={"btn"}><i className={"fa fa-eye fs-5 px-2 text-success fw-bold"}> Live view</i></button></Link></td>
                         </tr>
                     ))}
                     </tbody>

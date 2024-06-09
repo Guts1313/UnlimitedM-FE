@@ -22,27 +22,43 @@ function ProductDetail() {
         setNotifications,
         subscribeToChannel,
         clientRef,
-        connectWebSocket,
+        reconnectWebSocket,
         winnerNotification,
         setWinnerNotification
     } = useNotifications();
     const {isSubbedToUpdates, setIsSubbedToUpdates} = useAuth();
     const [showWinnerAnimation, setShowWinnerAnimation] = useState(false);
+    const [showSoldSign, setSoldSign] = useState(false);
 
     useEffect(() => {
-        if (isConnected) {
+        if (clientRef.current && isConnected) {
             fetchProductAndLatestBid();
             subscribeToProductUpdates();
+        }else{
+            // navigate('/products')
+            setTimeout(async ()=>{
+               await reconnectWebSocket();
+                fetchProductAndLatestBid();
+                subscribeToProductUpdates();
+            },3000)
+
         }
     }, [isConnected, isSubbedToUpdates]);
 
-    const subscribeToAllChannels = () => {
-        setIsSubbedToUpdates(true);
-        setTimeout(() => {
-            subscribeToNotifications()
-            subscribeToWinnersQueue()
-        }, 3500);
-    };
+    // const subscribeToAllChannels = () => {
+    //     setIsSubbedToUpdates(true);
+    //     setTimeout(() => {
+    //         subscribeToNotifications()
+    //         subscribeToWinnersQueue()
+    //     }, 3500);
+    // };
+
+    function changeProdImg() {
+        const imgElement = document.getElementById('productimg');
+        const newImageUrl = 'https://fmlsstore.com/cdn/shop/products/1ce432a22cf586cef5ebe26ed9982411e01304c1.jpg?v=1476905941'; // New image URL
+        imgElement.src = newImageUrl;
+    }
+
 
     const subscribeToProductUpdates = () => {
         subscribeToChannel(`/topic/product${id}`, (message) => {
@@ -60,7 +76,9 @@ function ProductDetail() {
                 setTimeout(() => {
                     setShowWinnerAnimation(false);
                 }, 5000); // Hide the animation after 5 seconds
-            }, 3000); // Show the animation after 3 seconds
+            }, 1000); // Show the animation after 3 seconds
+            changeProdImg();
+
         });
     };
 
@@ -95,6 +113,12 @@ function ProductDetail() {
         try {
             const productResponse = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/${id}`, {headers});
             setProduct(productResponse.data.productEntity);
+            if (product.productStatus === "SOLD"){
+                setTimeout(()=>{
+                    navigate('/products')
+                },1000)
+                return;
+            }
             const bidResponse = await axios.get(`http://localhost:8080/bids/latest/${id}`, {headers});
             setLatestBid(bidResponse.data.bidAmount);
         } catch (error) {
@@ -107,7 +131,8 @@ function ProductDetail() {
         const refreshToken = localStorage.getItem('refreshToken');
         const newAccessToken = await refreshAccessToken(refreshToken);
         if (newAccessToken && !isSubbedToUpdates) {
-            subscribeToAllChannels();
+            subscribeToWinnersQueue()
+            subscribeToNotifications()
         }
     };
 
@@ -116,7 +141,7 @@ function ProductDetail() {
         if (clientRef.current && clientRef.current.connected && bidAmount) {
             const bidRequest = {
                 productId: id,
-                bidAmount: parseFloat(bidAmount),
+                bidAmount: bidAmount.toString(), // Send bid amount as a string
                 userId: localStorage.getItem('userId')
             };
             clientRef.current.publish({
@@ -134,8 +159,8 @@ function ProductDetail() {
     return (
         <div className="product-detail-container container-fluid vh-100 m-0 p-0 d-flex flex-nowrap">
             <div className="product-info-card w-100 mx-0 d-flex">
-                <div className="product-img-container">
-                    <img className={"container-fluid justify-content-center"} src={product.productUrl} height="420px"
+                <div className="product-img-container" id={"productimgcontainer"}>
+                    <img className={"container-fluid justify-content-center"} src={product.productUrl} id={"productimg"} height="420px"
                          style={{borderRadius: 15}} alt={product.productName}/>
                 </div>
                 <div className="product-description mx-2 text-white bg-dark d-flex flex-column" style={{height: 430}}>
@@ -173,12 +198,12 @@ function ProductDetail() {
                 </div>
             </div>
             {showWinnerAnimation && (
-                <div style={{
+                <div className={"container-fluid w-100 vh-100"} style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '300px',
-                    height: '300px',
+                    width: '700px',
+                    height: '700px',
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
@@ -187,7 +212,24 @@ function ProductDetail() {
                 }}>
                     <Lottie animationData={auctionwinner} loop={false} />
                 </div>
-            )}
+            )}{showSoldSign && (
+            <div className={"sold container-fluid w-100 h-100"} style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '700px',
+                height: '700px',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                zIndex: '9999',
+                backgroundImage: "url('https://fmlsstore.com/cdn/shop/products/1ce432a22cf586cef5ebe26ed9982411e01304c1.jpg?v=1476905941')",
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+            }}>
+            </div>
+        )}
         </div>
     );
 }
