@@ -7,7 +7,7 @@ PROJECT_ID="your-gcp-project-id"
 REGION="your-gcp-region"
 
 # Navigate to project directory
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/sem3-fe"
 
 # Build the Docker image
 docker build -t ${IMAGE_NAME}:${TAG} .
