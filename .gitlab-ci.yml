@@ -13,7 +13,7 @@ services:
 build:
   stage: build
   script:
-    - cd sem3-fe/sprint3-2
+    - cd sem3-fe
     - bash build_and_push.sh
 
 deploy:
