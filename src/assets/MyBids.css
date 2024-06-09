@@ -1,0 +1,19 @@
+.container-fluid.mw-100.d-flex{
+    margin-top: -1.3rem!important;
+    margin-right: -0.1rem;
+    min-width: 250px!important;
+    width: 100% !important;
+}
+
+.bg-black.vh-100{
+    margin-right: -0.7rem;
+}
+
+.side-navigation.container-fluid.vh-100{
+    min-width: 200px!important;
+    width: 200px!important;
+}
+.container-fluid.vh-100.w-100.bg-gradient{
+    min-width: 400px !important;
+    width: 100% !important;
+}
