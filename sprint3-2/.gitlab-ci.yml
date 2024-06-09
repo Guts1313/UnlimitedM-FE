@@ -59,3 +59,4 @@ deploy:
     url: https://unlimitedmarketplace-frontend.$REGION.run.app
   tags:
     - docker
+
