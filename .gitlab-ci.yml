@@ -11,10 +11,13 @@ services:
   - docker:dind
 
 before_script:
-  # Ensure gcloud is available
-  - pwsh -Command 'if (-Not (Test-Path "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd")) { Invoke-WebRequest https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -OutFile google-cloud-sdk.zip; Expand-Archive google-cloud-sdk.zip -DestinationPath $Env:USERPROFILE -Force; Remove-Item google-cloud-sdk.zip; Start-Process cmd -ArgumentList "/c $Env:USERPROFILE\google-cloud-sdk\install.bat" -Wait }'
+  # Ensure gcloud is available and provide debug information
+  - pwsh -Command 'Write-Host "Checking if gcloud is installed..."'
+  - pwsh -Command 'if (-Not (Test-Path "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd")) { Write-Host "gcloud not found, installing..."; Invoke-WebRequest https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -OutFile google-cloud-sdk.zip; Expand-Archive google-cloud-sdk.zip -DestinationPath $Env:USERPROFILE -Force; Remove-Item google-cloud-sdk.zip; Start-Process cmd -ArgumentList "/c $Env:USERPROFILE\google-cloud-sdk\install.bat" -Wait; Write-Host "gcloud installed" } else { Write-Host "gcloud already installed" }'
   - pwsh -Command '$Env:Path += ";$Env:USERPROFILE\google-cloud-sdk\bin"'
   - pwsh -Command 'Write-Host $Env:Path'
+  - pwsh -Command 'Get-Command gcloud.cmd'
+
   # Authenticate with Google Cloud
   - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
   - pwsh -Command '[System.Convert]::FromBase64String((Get-Content -Raw -Path $Env:HOME\gcloud-service-key.b64)) | ForEach-Object { $_ } | Set-Content -Path $Env:HOME\gcloud-service-key.json -AsByteStream'
