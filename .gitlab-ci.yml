@@ -38,6 +38,11 @@ build:
 docker_build:
   stage: docker_build
   image: google/cloud-sdk:latest
+  before_script:
+    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+    - gcloud config set project $PROJECT_ID
+    - gcloud auth configure-docker
   script:
     - docker build -t gcr.io/$PROJECT_ID/sem3-fe:latest -f Dockerfile .
     - docker push gcr.io/$PROJECT_ID/sem3-fe:latest
