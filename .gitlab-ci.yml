@@ -11,8 +11,10 @@ services:
   - docker:dind
 
 before_script:
-  # Ensure gcloud is available in PATH
-  - pwsh -Command 'if (-Not ($Env:Path -contains "$Env:USERPROFILE\google-cloud-sdk\bin")) { $Env:Path += ";$Env:USERPROFILE\google-cloud-sdk\bin" }'
+  # Explicitly add gcloud to PATH
+  - pwsh -Command '$Env:Path += ";$Env:USERPROFILE\google-cloud-sdk\bin"'
+  # Print PATH to debug
+  - pwsh -Command 'Write-Host $Env:Path'
   # Authenticate with Google Cloud
   - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
   - pwsh -Command '[System.Convert]::FromBase64String((Get-Content -Raw -Path $Env:HOME\gcloud-service-key.b64)) | ForEach-Object { $_ } | Set-Content -Path $Env:HOME\gcloud-service-key.json -AsByteStream'
@@ -39,5 +41,4 @@ deploy:
     - docker
   only:
     - workbranch
-
 
