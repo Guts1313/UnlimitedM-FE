@@ -3,8 +3,8 @@ stages:
   - deploy
 
 variables:
-  PROJECT_ID: your-gcp-project-id
-  REGION: your-gcp-region
+  PROJECT_ID: unlimitedmarketplace
+  REGION: europe-north1
   GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
 
 services:
@@ -25,7 +25,8 @@ build:
     - pwsh -Command 'bash build_and_push.sh'
   tags:
     - docker
-
+  only:
+    - workbranch
 deploy:
   stage: deploy
   script:
