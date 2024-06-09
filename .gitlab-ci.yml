@@ -12,8 +12,13 @@ services:
 
 before_script:
   # Install Google Cloud SDK
-  - pwsh -Command 'Invoke-WebRequest https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -OutFile google-cloud-sdk.zip; Expand-Archive google-cloud-sdk.zip -DestinationPath $Env:USERPROFILE; Remove-Item google-cloud-sdk.zip; $Env:USERPROFILE\google-cloud-sdk\install.bat'
-  - pwsh -Command '$env:PATH += ";$Env:USERPROFILE\google-cloud-sdk\bin"; gcloud --quiet components update; gcloud --quiet components install kubectl'
+  - pwsh -Command 'Invoke-WebRequest https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -OutFile google-cloud-sdk.zip'
+  - pwsh -Command 'Expand-Archive google-cloud-sdk.zip -DestinationPath $Env:USERPROFILE'
+  - pwsh -Command 'Remove-Item google-cloud-sdk.zip'
+  - cmd /c "%USERPROFILE%\google-cloud-sdk\install.bat"
+
+  # Add Google Cloud SDK to PATH
+  - pwsh -Command '$env:PATH += ";$Env:USERPROFILE\google-cloud-sdk\bin"'
 
   # Authenticate with Google Cloud
   - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
@@ -23,6 +28,7 @@ before_script:
   - pwsh -Command 'gcloud auth configure-docker'
   - pwsh -Command 'gcloud services enable artifactregistry.googleapis.com'
   - pwsh -Command 'gcloud services enable run.googleapis.com'
+
 
 
 build:
