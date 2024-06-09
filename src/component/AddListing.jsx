@@ -37,7 +37,7 @@ const AddListing = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/unlimitedmarketplace/products', data, {
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/products`, data, {
                 headers: headers
             });
 
