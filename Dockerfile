@@ -1,7 +1,6 @@
-# Use the official Node.js image as the base image
-FROM node:14-alpine AS build
+# Stage 0: Build the React app
+FROM node:14-alpine as build
 
-# Set the working directory
 WORKDIR /app
 
 # Copy package.json and package-lock.json
@@ -10,23 +9,25 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# Copy the rest of the application code
+# Copy the rest of the application files
 COPY . .
 
 # Build the application
 RUN npm run build
 
-# Use the official Nginx image to serve the static files
+# Stage 1: Serve the app with nginx
 FROM nginx:alpine
 
-# Copy the built files from the previous stage
+# Copy built files from the previous stage
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expose the port Nginx is running on
+# Copy custom nginx config
+COPY nginx.conf /etc/nginx/nginx.conf
+
 EXPOSE 80
 
-# Start Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
 
 
 

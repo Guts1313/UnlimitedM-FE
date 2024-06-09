@@ -1,10 +1,12 @@
 #!/bin/bash
 
+set -x
+
 # Define variables
 IMAGE_NAME="my-frontend"
 TAG=$(git rev-parse --short HEAD)
-PROJECT_ID="your-gcp-project-id"
-REGION="your-gcp-region"
+PROJECT_ID="unlimitedmarketplace"
+REGION="europe-north1"
 
 # Navigate to project directory
 cd "$(dirname "$0")/sem3-fe"
@@ -29,3 +31,6 @@ gcloud run deploy ${IMAGE_NAME} \
   --region ${REGION} \
   --platform managed \
   --allow-unauthenticated
+
+set +x
+
