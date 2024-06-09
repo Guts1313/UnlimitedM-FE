@@ -22,6 +22,8 @@ build_and_test:
       - build
   tags:
     - docker
+  only:
+    - workbranch
 
 docker_build:
   stage: docker_build
@@ -37,6 +39,8 @@ docker_build:
     - docker push gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest
   tags:
     - docker
+  only:
+    - workbranch
 
 
 deploy:
@@ -59,4 +63,6 @@ deploy:
     url: https://unlimitedmarketplace-frontend.$REGION.run.app
   tags:
     - docker
+  only:
+    - workbranch
 
