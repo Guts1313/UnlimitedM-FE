@@ -11,18 +11,18 @@ services:
   - docker:dind
 
 before_script:
-  # Explicitly add gcloud to PATH
+  # Ensure gcloud is available
+  - pwsh -Command 'if (-Not (Test-Path "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd")) { Invoke-WebRequest https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.zip -OutFile google-cloud-sdk.zip; Expand-Archive google-cloud-sdk.zip -DestinationPath $Env:USERPROFILE -Force; Remove-Item google-cloud-sdk.zip; Start-Process cmd -ArgumentList "/c $Env:USERPROFILE\google-cloud-sdk\install.bat" -Wait }'
   - pwsh -Command '$Env:Path += ";$Env:USERPROFILE\google-cloud-sdk\bin"'
-  # Print PATH to debug
   - pwsh -Command 'Write-Host $Env:Path'
   # Authenticate with Google Cloud
   - pwsh -Command 'echo $Env:GCLOUD_SERVICE_KEY | Out-File -FilePath $Env:HOME\gcloud-service-key.b64 -Encoding ascii'
   - pwsh -Command '[System.Convert]::FromBase64String((Get-Content -Raw -Path $Env:HOME\gcloud-service-key.b64)) | ForEach-Object { $_ } | Set-Content -Path $Env:HOME\gcloud-service-key.json -AsByteStream'
-  - pwsh -Command 'gcloud auth activate-service-account --key-file $Env:HOME\gcloud-service-key.json'
-  - pwsh -Command 'gcloud config set project $Env:PROJECT_ID'
-  - pwsh -Command 'gcloud auth configure-docker'
-  - pwsh -Command 'gcloud services enable artifactregistry.googleapis.com'
-  - pwsh -Command 'gcloud services enable run.googleapis.com'
+  - pwsh -Command '$gcloud = "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd"; & $gcloud auth activate-service-account --key-file $Env:HOME\gcloud-service-key.json'
+  - pwsh -Command '$gcloud = "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd"; & $gcloud config set project $Env:PROJECT_ID'
+  - pwsh -Command '$gcloud = "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd"; & $gcloud auth configure-docker'
+  - pwsh -Command '$gcloud = "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd"; & $gcloud services enable artifactregistry.googleapis.com'
+  - pwsh -Command '$gcloud = "$Env:USERPROFILE\google-cloud-sdk\bin\gcloud.cmd"; & $gcloud services enable run.googleapis.com'
 
 build:
   stage: build
@@ -41,4 +41,5 @@ deploy:
     - docker
   only:
     - workbranch
+
 
