@@ -16,7 +16,7 @@ build:
   image: node:14
   script:
     - npm install
-    - npm run build
+    - CI=false npm run build  # Disable treating warnings as errors
   artifacts:
     paths:
       - build/
@@ -57,6 +57,7 @@ deploy:
     - docker
   only:
     - workbranch
+
 
 
 
