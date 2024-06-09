@@ -23,6 +23,7 @@ build:
   artifacts:
     paths:
       - build/
+      - nginx.conf  # Ensure nginx.conf is included in the artifacts
   tags:
     - docker
   only:
