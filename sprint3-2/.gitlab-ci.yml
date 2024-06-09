@@ -38,8 +38,7 @@ docker_build:
     - docker push gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest
   tags:
     - docker
-  only:
-    - workbranch
+
 deploy:
   stage: deploy
   image: google/cloud-sdk:latest
@@ -60,5 +59,3 @@ deploy:
     url: https://unlimitedmarketplace-frontend.$REGION.run.app
   tags:
     - docker
-  only:
-    - workbranch
