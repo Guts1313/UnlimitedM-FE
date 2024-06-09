@@ -18,8 +18,7 @@ docker build -t ${IMAGE_NAME}:${TAG} .
 docker tag ${IMAGE_NAME}:${TAG} gcr.io/${PROJECT_ID}/${IMAGE_NAME}:${TAG}
 
 # Authenticate with Google Cloud
-pwsh -Command "\$env:GCLOUD_SERVICE_KEY | Out-File -FilePath \${env:HOME}/gcloud-service-key.b64 -Encoding ascii"
-pwsh -Command "[System.Convert]::FromBase64String((Get-Content -Raw -Path \${env:HOME}/gcloud-service-key.b64)) | Set-Content -Path \${env:HOME}/gcloud-service-key.json -Encoding Byte"
+echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/gcloud-service-key.json
 gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
 gcloud auth configure-docker
 
@@ -33,4 +32,4 @@ gcloud run deploy ${IMAGE_NAME} \
   --platform managed \
   --allow-unauthenticated
 
-set +x
+set +ex
