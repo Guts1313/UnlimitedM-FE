@@ -15,7 +15,9 @@ build_and_test:
   stage: build_and_test
   image: node:14-alpine
   script:
+    - rm -rf node_modules package-lock.json
     - npm install
+    - npm audit fix --force
     - npm run build
   artifacts:
     paths:
@@ -24,7 +26,6 @@ build_and_test:
     - docker
   only:
     - workbranch
-
 docker_build:
   stage: docker_build
   image: google/cloud-sdk:latest
@@ -41,8 +42,6 @@ docker_build:
     - docker
   only:
     - workbranch
-
-
 deploy:
   stage: deploy
   image: google/cloud-sdk:latest
