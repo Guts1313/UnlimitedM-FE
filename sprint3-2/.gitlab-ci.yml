@@ -1,5 +1,5 @@
 stages:
-  - build
+  - build_and_test
   - docker_build
   - deploy
 
@@ -11,9 +11,9 @@ variables:
 services:
   - docker:dind
 
-build:
-  stage: build
-  image: node:latest
+build_and_test:
+  stage: build_and_test
+  image: node:14-alpine
   script:
     - cd sprin3-2
     - npm install
@@ -38,6 +38,7 @@ docker_build:
     - docker push gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest
   tags:
     - docker
+
 
 deploy:
   stage: deploy
