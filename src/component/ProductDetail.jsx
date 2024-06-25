@@ -112,7 +112,7 @@ function ProductDetail() {
         const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
         try {
             //${process.env.REACT_APP_BACKEND_URL}
-            const productResponse = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/${id}`, {headers});
+            const productResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/products/${id}`, {headers});
             setProduct(productResponse.data.productEntity);
             if (product.productStatus === "SOLD"){
                 setTimeout(()=>{
@@ -120,7 +120,7 @@ function ProductDetail() {
                 },1000)
                 return;
             }
-            const bidResponse = await axios.get(`http://localhost:8080/bids/latest/${id}`, {headers});
+            const bidResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/bids/latest/${id}`, {headers});
             setLatestBid(bidResponse.data.bidAmount);
         } catch (error) {
             console.error('Error fetching product details or latest bid:', error);

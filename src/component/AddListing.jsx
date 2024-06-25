@@ -42,7 +42,7 @@ const AddListing = () => {
 
         try {
             //`${process.env.REACT_APP_BACKEND_URL}
-            const response = await axios.post(`http://localhost:8080/unlimitedmarketplace/products`, data, {
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/products`, data, {
                 headers: headers
             });
             if (response.status === 201) {

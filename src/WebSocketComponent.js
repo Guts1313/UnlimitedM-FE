@@ -5,7 +5,7 @@ import SockJS from 'sockjs-client';
 function WebSocketComponent() {
     useEffect(() => {
         // Connect to the WebSocket server
-        const socket = new SockJS('http://localhost:8080/websocket-sockjs-stomp');
+        const socket = new SockJS(`${process.env.REACT_APP_BACKEND_URL}/websocket-sockjs-stomp`);
         const client = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {

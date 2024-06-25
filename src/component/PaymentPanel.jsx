@@ -14,7 +14,7 @@ const PaymentOptions = () => {
     const [slides, setSlides] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/payments/listpaymentoptions', {
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/payments/listpaymentoptions`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('accessToken')}`
             }
@@ -47,7 +47,7 @@ const PaymentOptions = () => {
         const lastFourDigits = cardNumber.slice(-4);
         const formattedNumber = '**** **** **** ' + lastFourDigits;
 
-        axios.post('http://localhost:8080/payments/add', {
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/payments/add`, {
             cardType,
             cardNumber: formattedNumber,
             cardName,

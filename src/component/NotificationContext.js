@@ -28,7 +28,7 @@ export const NotificationProvider = ({ children }) => {
             token = await refreshAccessToken(localStorage.getItem('refreshToken'));
         }
         //${process.env.REACT_APP_BACKEND_URL}
-        const socket = new SockJS(`http://localhost:8080/websocket-sockjs-stomp?access_token=${encodeURIComponent(token)}`);
+        const socket = new SockJS(`${process.env.REACT_APP_BACKEND_URL}/websocket-sockjs-stomp?access_token=${encodeURIComponent(token)}`);
         const stompClient = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {

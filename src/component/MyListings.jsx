@@ -16,7 +16,7 @@ const MyListings = () => {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 };
                 //${process.env.REACT_APP_BACKEND_URL}
-                const response = await axios.get(`http://localhost:8080/unlimitedmarketplace/products/mylistings`, {
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/products/mylistings`, {
                     params: { userId },
                     headers
                 });

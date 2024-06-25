@@ -23,7 +23,7 @@ const MyBids = () => {
         const userId = localStorage.getItem('userId');
         const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
         try {
-            const response = await axios.get(`http://localhost:8080/bids/user-bids/${userId}`, { headers });
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/bids/user-bids/${userId}`, { headers });
             setBidProducts(response.data.userBidProducts || []);
             setTotalBidAmount(response.data.totalBidAmount || 0);
         } catch (error) {
@@ -82,7 +82,7 @@ const MyBids = () => {
     const fetchPaymentMethods = async () => {
         const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
         try {
-            const response = await axios.get('http://localhost:8080/payments/listpaymentoptions', { headers });
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/payments/listpaymentoptions`, { headers });
             setPaymentMethods(response.data || []);
         } catch (error) {
             console.error('Error fetching payment methods:', error);
@@ -111,7 +111,7 @@ const MyBids = () => {
         };
 
         try {
-            await axios.post('http://localhost:8080/payments/process', paymentRequest, {
+            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/payments/process`, paymentRequest, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('accessToken')}`
                 }
