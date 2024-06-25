@@ -61,7 +61,7 @@ const AddListing = () => {
                 }, 8000)
                 // Handle successful creation here (e.g., clear the form, display a success message)
             } else {
-                console.error("Failed to create product");
+                console.error("Failed to create products");
                 // Handle errors here
             }
         } catch (error) {
