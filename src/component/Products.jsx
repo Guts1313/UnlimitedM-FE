@@ -13,8 +13,8 @@ function Products(props) {
         // Fetches products from the backend when the component mounts
         const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
 
-
-        axios.get(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/products`, {headers})
+        //${process.env.REACT_APP_BACKEND_URL}
+        axios.get(`http://localhost:8080/unlimitedmarketplace/products`, {headers})
             .then(response => {
                 setProducts(response.data.productEntities);
             })

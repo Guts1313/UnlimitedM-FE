@@ -51,7 +51,8 @@ function App() {
                         isRefreshing = true;
                         const refreshToken = localStorage.getItem('refreshToken');
                         try {
-                            const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/auth/refresh-token`, {refreshToken});
+                            //{process.env.REACT_APP_BACKEND_URL}
+                            const res = await axios.post(`http://localhost:8080/unlimitedmarketplace/auth/refresh-token`, {refreshToken});
                             if (res.status === 200) {
                                 localStorage.setItem('accessToken', res.data.accessToken);
                                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.accessToken}`;

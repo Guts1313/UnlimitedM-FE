@@ -50,7 +50,8 @@ export const AuthProvider = ({ children }) => {
 
     const handleLogout = async () => {
         try {
-            await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/auth/logout`, {
+            //${process.env.REACT_APP_BACKEND_URL}
+            await axios.post(`http://localhost:8080/unlimitedmarketplace/auth/logout`, {
                 refreshToken: localStorage.getItem('refreshToken')
             });
             localStorage.removeItem('accessToken');
