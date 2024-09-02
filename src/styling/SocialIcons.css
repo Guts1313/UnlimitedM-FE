@@ -1,0 +1,8 @@
+.social-icons{
+    display: flex;
+    justify-content:space-evenly;
+
+}
+.social-icons .icon {
+    margin: 0 10px; /* Adjust the spacing between icons */
+}
