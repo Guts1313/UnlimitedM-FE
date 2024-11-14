@@ -1,0 +1,150 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  padding:0;
+  height: 100vh;
+  /*background: url('https://cms-cdn.thesolesupplier.co.uk/2022/08/how-to-store-and-display-your-sneaker-collection_w1160_h672.jpg.webp');*/
+  background-image: url("https://i.pinimg.com/originals/9f/d0/27/9fd0273e36cceb3cdec689552647e5a5.gif");
+  /*background-image: url("https://assets-global.website-files.com/62eff2679147fe8025608aad/6573b1c984845393f2ba40e4_BLOG%20Cover.gif");*/
+  width: 100%;
+  background-size: contain;
+  background-position: 100px -50px;
+  background-attachment: scroll;
+  min-width: 300px;
+  border-radius: 10px;
+  object-fit: scale-down;
+
+}
+.user-input.bg-gradient{
+  background: linear-gradient(rgba(0, 0, 0, 0.99), rgba(24, 16, 16, 0.66)) !important;
+  backdrop-filter: contrast(10%);
+  min-height: 50vh !important;
+  box-shadow: inset 0px -1px 12px 3px #a20202
+}
+.form-container{
+  min-height: 90vh!important;
+  background: linear-gradient(rgb(204, 0, 0), rgb(204, 0, 0)) !important;
+}
+html{
+  height: 100vh;
+  margin:0;
+  padding: 0;
+ }
+
+*{
+  margin: 0;
+  padding:0;
+}
+.navbar, .sidebar, .backdrop {
+  z-index: 1050; /* Ensures navbar and sidebar are above most content */
+}
+
+.hero {
+  z-index: 500; /* Lower than the sidebar but above regular content */
+  position: relative; /* Needed to establish a stacking context for z-index */
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding:0;
+}
+
+/* Ensures the sidebar is visible above all page content */
+.sidebar {
+  margin-top: 7%;
+  z-index: 1060; /* Higher than navbar to ensure it's on top when expanded */
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+  backdrop-filter: blur(10px);
+}
+.swiper {
+  width: 500px !important;
+  height: 400px !important;
+  padding: 50px !important;
+}
+.swiper-slide {
+  background-position: center !important;
+  background-size: cover !important;
+  width: 400px !important;
+  height: 400px !important;
+}
+
+.swiper-slide img {
+  display: block !important;
+  width: 100% !important;
+  box-shadow: 1px 0px 13px 7px white;
+  border-radius: 15px;
+  height: 300px;
+}
+.backdrop {
+  z-index: 1055; /* Just below the sidebar but above everything else */
+}
+
+/* General z-index management for the carousel to ensure it's below the sidebar */
+.carousel, .carousel-inner, .carousel-item {
+  z-index: 500; /* Ensure this is less than the sidebar's z-index */
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.container{
+  display: flex;
+  transform: translateY(35%);
+  color: black;
+  font-weight: 900;
+  width: 100%;
+}
+.container-nav{
+  display: flex;
+  font-weight: 700;
+  transform: translateY(35%);
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+
+}
+.container-nav .nav-link{
+  font-weight: 900;
+  color: white;
+
+}
+.nav-item{
+  color: white;
+}
+
+.navbar{
+  height: 110px;
+  transform: translateY(-20px);
+  background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+}
+.bg-transparent{
+  background: linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.17));
+  backdrop-filter: blur(8px);
+}
+.transparent-table {
+  background-color: transparent;
+}
+
+.table-container {
+  background-color: transparent;
+}
+
+.table-cell {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-head-cell {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.table-row {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/*.navbar {*/
+/*  margin-bottom: 11%;*/
+/*}*/

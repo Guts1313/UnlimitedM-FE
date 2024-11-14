@@ -1,0 +1,203 @@
+
+.bg-products {
+    background-image: url("https://i.pinimg.com/originals/9f/d0/27/9fd0273e36cceb3cdec689552647e5a5.gif");
+    /*background-image: url("https://cdn.dribbble.com/users/1117956/screenshots/4532749/jordan_square_gif_042918.gif");*/
+    background-size: contain;
+    background-attachment: scroll;
+    overflow: auto;
+    margin-left: 0.45rem;
+    width: 100%;
+    height: 100vh;
+    object-fit: contain;
+    /* This can help with keeping the background fixed during scrolling */
+    /*height: auto; !* Ensures the element is at least the height of the viewport *!*/
+    /*width: 100%; !* Ensures the element is as wide as the viewport *!*/
+    /*background-position: 50% 50%;*/
+    /*overflow: hidden;*/
+    /*object-fit: contain;*/
+}
+
+/*@media (min-width: 170px) and (max-width: 767px) {*/
+/*    .products-container {*/
+/*        margin-left: -6rem;*/
+/*        margin-right: -4rem;*/
+/*    }*/
+/*}*/
+
+
+.products-container .card {
+    flex: 0 0 300px; /* Cards won't grow or shrink */
+    margin-bottom: 16px; /* Adjust the bottom margin to create space between rows */
+    height: 320px;
+    width: 350px;
+    transition: transform ease-in-out 0.3s;
+    /*margin-right: 20px;*/
+    /*margin-left: 5%;*/
+}
+
+/*.btn{*/
+/*    margin-top:-10px;*/
+/*    width: 25%;*/
+/*}*/
+
+.products-container .card:hover {
+    transform: scale(120.3%);
+}
+
+.btn.pb-0.mb-0 {
+    /* Your styles here */
+    color: blue; /* Example property */
+    border: 2px solid #000000; /* Example property */
+}
+
+.carousel-container {
+    height: 400px;
+    width: 100%;
+}
+
+.carousel-inner {
+    border-radius: 100px;
+    min-width: 100%;
+    width: 100%;
+    margin-left: -12px;
+}
+
+
+.carousel-item.active {
+    height: 600px;
+    width: 100%;
+    min-width: 300px;
+    background-position: center;
+    background-size: contain;
+}
+.row-cols-md-3{
+    min-width: 100% !important;
+    transform: translateX(0.8rem) !important;
+
+}
+
+.carousel-item {
+    display: flex;
+    flex-wrap: nowrap;
+}
+.carousel-item.d-flex{
+    min-width: 100px;
+}
+.carousel-item img {
+    flex: 1 0 50%; /* allows images to shrink but not disappear */
+    max-width: 50%; /* ensures no image takes more than half the space */
+    min-width: 300px;
+}
+.products-container{
+    min-width: 100% !important;
+    align-self: center;
+    margin: 0!important;
+}
+@media (max-width: 768px) {
+    .carousel-item img {
+        height: 340px; /* Example: Adjust height to keep images visually consistent on small screens */
+    }
+
+    .products-container {
+        margin-top: 0.2rem;
+        margin-left: 1rem;
+        justify-content: center;
+        align-self: center;
+        justify-items: center;
+        padding-right: 3rem!important;
+    }
+}
+
+@media (min-width: 656px) and (max-width: 899px) {
+    .btn.btn-outline-light {
+        margin-top: 10rem;
+    }
+
+    .product-detail-container.container-fluid {
+        transform: translateY(10%);
+    }
+
+    .product-info-card img {
+        margin-top: -1rem!important;
+    }
+
+    .h-50 {
+        height: 56% !important;
+    }
+
+}
+
+.text-center, .fa-cart-plus {
+    transform: translateX(15px) !important;
+}
+.fa.fa-cart-plus{
+    transform: translateX(-0.5rem) !important;
+}
+
+
+.d-flex.fs-5 {
+    margin-top: 3rem !important;
+    color: red !important;
+}
+
+.btn-container.text-wrap {
+    width: 100% !important;
+    display: flex;
+    margin-bottom: 50px !important;
+}
+
+.container-buttons{
+    min-width: 118% !important;
+    width: 121.1% !important;
+    transform: translate(-1.4rem,4.88rem);
+    border-top: 1px solid red;
+    border-bottom: 0.1rem solid red;
+    border-left: 1px solid red;
+    border-right: 1px solid red;
+}
+
+
+.card {
+    box-shadow: 4px 11px 1px 20px white;
+    border: 1px solid white;
+
+}
+
+.card-body.d-flex.flex-column {
+    border-radius: 60px;
+    background: rgba(255, 255, 255, 0) !important;
+    backdrop-filter: blur();
+    border: none;
+    max-height: 1%;
+    margin-top: 0.1rem !important;
+
+}
+
+.fa.fa-eur {
+    padding: 0.4rem;
+    margin-left: -0.3rem;
+    color: red;
+    text-decoration: none !important;
+}
+
+.products-container {
+    background: linear-gradient(rgba(0, 0, 0, 0), rgba(204, 190, 190, 0));
+    border-radius: 50px;
+    margin-top: 5%;
+    backdrop-filter: blur(12px);
+    min-height: 100vh;
+}
+
+.products-container .card-img-top {
+    width: 100%; /* Ensures image takes up 100% of card width */
+    object-fit: cover; /* Ensures images cover the area without distorting aspect ratio */
+    height: auto;
+    aspect-ratio: 16 / 9; /* Maintains an aspect ratio of 16:9 */
+}
+
+@media (min-width: 768px) {
+    .row-cols-md-3 > * {
+        flex: 0 !important;
+        width: 33.333333% !important;
+    }
+}

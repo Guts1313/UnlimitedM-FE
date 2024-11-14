@@ -1,0 +1,36 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  PROJECT_ID: unlimitedmarketplace
+  REGION: europe-north1
+  GCLOUD_SERVICE_KEY: $GCLOUD_SERVICE_KEY
+
+services:
+  - docker:dind
+
+before_script:
+  - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+  - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+  - gcloud config set project $PROJECT_ID
+  - gcloud auth configure-docker
+  - gcloud services enable artifactregistry.googleapis.com
+  - gcloud services enable run.googleapis.com
+
+build:
+  stage: build
+  script:
+    - bash build_and_push.sh
+  tags:
+    - docker
+
+deploy:
+  stage: deploy
+  script:
+    - bash deploy.sh
+  tags:
+    - docker
+  only:
+    - workbranch
+
