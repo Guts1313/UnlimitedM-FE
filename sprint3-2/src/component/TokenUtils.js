@@ -9,7 +9,7 @@ export const refreshAccessToken = async (refreshToken) => {
             return response.data.accessToken;
         }
     } catch (error) {
-        console.error("Failed to refresh token:", error);
+        console.error("Failed to refresh tokens:", error);
         throw error;
     }
 };

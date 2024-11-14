@@ -26,7 +26,7 @@ const Home = () => {
         const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
         try {
             await refreshAccess();
-            const bidResponse = await axios.get(`http://localhost:8080/bids/latest/${id}`, { headers });
+            const bidResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/bids/latest/${id}`, { headers });
             setLatestBids(prevBids => ({ ...prevBids, [id]: bidResponse.data.bidAmount }));
         } catch (error) {
             console.error('Error fetching product details or latest bid:', error);
@@ -47,7 +47,7 @@ const Home = () => {
         };
         try {
             if (!isConnected) {
-                const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/refresh-token', { headers });
+                const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/auth/refresh-token`, { headers });
                 if (response.data && response) {
                     localStorage.setItem('accessToken', response.data.accessToken);
                     localStorage.setItem('refreshToken', response.data.refreshToken);

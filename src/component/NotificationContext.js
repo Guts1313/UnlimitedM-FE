@@ -27,7 +27,8 @@ export const NotificationProvider = ({ children }) => {
             console.log("Attempting to refresh token before connecting...");
             token = await refreshAccessToken(localStorage.getItem('refreshToken'));
         }
-        const socket = new SockJS(`http://localhost:8080/websocket-sockjs-stomp?access_token=${encodeURIComponent(token)}`);
+        //${process.env.REACT_APP_BACKEND_URL}
+        const socket = new SockJS(`${process.env.REACT_APP_BACKEND_URL}/websocket-sockjs-stomp?access_token=${encodeURIComponent(token)}`);
         const stompClient = new Client({
             webSocketFactory: () => socket,
             onConnect: () => {

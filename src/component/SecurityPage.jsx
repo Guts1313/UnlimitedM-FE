@@ -25,7 +25,7 @@ const SecurityPage = () => {
         try {
             const userId = localStorage.getItem('userId');
             const headers = { Authorization: `Bearer ${localStorage.getItem('accessToken')}` };
-            const response = await axios.put(`http://localhost:8080/unlimitedmarketplace/${userId}`, {
+            const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/${userId}`, {
                 userId,
                 currentPassword,
                 newPassword

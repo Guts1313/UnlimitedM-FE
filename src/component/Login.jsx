@@ -15,6 +15,7 @@ function Login() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isActive, setIsActive] = useState(false);
+
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [signupPassword, setSignupPassword] = useState('');
@@ -24,11 +25,12 @@ function Login() {
     const [showRegistrationSuccessAnimation, setShowRegistrationSuccessAnimation] = useState(false);
     const {
         setAlreadySubscribedChannels,
+        isAuthenticated,
         setIsAuthenticated,
         alreadySubscribedChannels,
         setIsSubbedToUpdates
     } = useAuth();
-
+//a
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -39,10 +41,6 @@ function Login() {
             setTimeout(() => {
                 setShowLoginSuccessAnimation(false)
             }, 3000)
-            setTimeout(() => {
-                navigate('/')
-            }, 3000);
-
             // setTimeout(() => setShowLoginSuccessAnimation(false), 5000);
         } catch (error) {
             setError('Failed to login: ' + (error.response?.data?.message || error.message));
@@ -68,7 +66,8 @@ function Login() {
 
     const onLogin = async (username, password) => {
         try {
-            const response = await axios.post('http://localhost:8080/unlimitedmarketplace/auth/login', {
+            //${process.env.REACT_APP_BACKEND_URL}
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace/auth/login`, {
                 username,
                 passwordHash: password
             });
@@ -78,8 +77,8 @@ function Login() {
                 localStorage.setItem('refreshToken', response.data.refreshToken);
                 localStorage.setItem('userId', response.data.userId);
                 const headers = {Authorization: `Bearer ${localStorage.getItem('accessToken')}`};
-
-                const getSubscribedChannelsResponse = await axios.get(`http://localhost:8080/api/subscriptions/user/${response.data.userId}`, {headers});
+                //${process.env.REACT_APP_BACKEND_URL}
+                const getSubscribedChannelsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/subscriptions/user/${response.data.userId}`, {headers});
 
                 let channelsSet = new Set();
                 if (getSubscribedChannelsResponse.data) {
@@ -98,15 +97,15 @@ function Login() {
                 const decodedToken = jwtDecode(response.data.accessToken);
                 const roles = decodedToken.roles || [];
                 const isAdmin = roles.includes('ROLE_ADMIN');
-
                 setIsAuthenticated(true);
-
                 if (isAdmin) {
                     setTimeout(() => {
                         navigate('/admin-panel');
-                    }, 5500);
+                    }, 3000);
                 } else {
-                    console.log('Regular user login');
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 3000);
                 }
             } else {
                 throw new Error('Invalid server response');
@@ -114,6 +113,9 @@ function Login() {
         } catch (error) {
             console.error('Login failed:', error);
             setError('Failed to login: ' + (error.response?.data?.message || error.message));
+            setTimeout(() => {
+                navigate('/login');
+            }, 3000);
         }
     };
 
@@ -147,7 +149,8 @@ function Login() {
     const handleRegister = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/unlimitedmarketplace', {
+            //${process.env.REACT_APP_BACKEND_URL}
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/unlimitedmarketplace`, {
                 userName: name,
                 email: email,
                 passwordHash: signupPassword,

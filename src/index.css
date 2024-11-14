@@ -124,7 +124,26 @@ code {
   background: linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.17));
   backdrop-filter: blur(8px);
 }
+.transparent-table {
+  background-color: transparent;
+}
 
+.table-container {
+  background-color: transparent;
+}
+
+.table-cell {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.table-head-cell {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.table-row {
+  background-color: rgba(0, 0, 0, 0.3);
+}
 
 /*.navbar {*/
 /*  margin-bottom: 11%;*/

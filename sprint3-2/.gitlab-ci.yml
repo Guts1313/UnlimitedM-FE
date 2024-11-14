@@ -1,6 +1,5 @@
 stages:
-  - build_and_test
-  - docker_build
+  - build
   - deploy
 
 variables:
@@ -11,57 +10,25 @@ variables:
 services:
   - docker:dind
 
-build_and_test:
-  stage: build_and_test
-  image: node:14-alpine
-  before_script:
-    # Correct PowerShell command to remove directories and files
-    - Remove-Item -Recurse -Force node_modules, package-lock.json
+before_script:
+  - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
+  - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
+  - gcloud config set project $PROJECT_ID
+  - gcloud auth configure-docker
+  - gcloud services enable artifactregistry.googleapis.com
+  - gcloud services enable run.googleapis.com
+
+build:
+  stage: build
   script:
-    - npm install
-    - npm audit fix --force
-    - npm run build
-  artifacts:
-    paths:
-      - build
+    - bash build_and_push.sh
   tags:
     - docker
 
-docker_build:
-  stage: docker_build
-  image: google/cloud-sdk:latest
-  before_script:
-    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
-    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
-    - gcloud config set project $PROJECT_ID
-    - gcloud services enable artifactregistry.googleapis.com
-    - gcloud auth configure-docker
-  script:
-    - docker build -t gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest -f Dockerfile .
-    - docker push gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest
-  tags:
-    - docker
-
-  only:
-    - workbranch
 deploy:
   stage: deploy
-  image: google/cloud-sdk:latest
-  before_script:
-    - echo $GCLOUD_SERVICE_KEY | base64 -d > ${HOME}/gcloud-service-key.json
-    - gcloud auth activate-service-account --key-file ${HOME}/gcloud-service-key.json
-    - gcloud config set project $PROJECT_ID
-    - gcloud services enable run.googleapis.com
   script:
-    - >
-      BACKEND_URL=$(cat backend_url.env | grep REACT_APP_BACKEND_URL | cut -d '=' -f 2) && \
-      echo "Using Backend URL: $BACKEND_URL" && \
-      gcloud run deploy unlimitedmarketplace-frontend --image gcr.io/$PROJECT_ID/unlimitedmarketplace-frontend:latest --region $REGION --platform managed --allow-unauthenticated --update-env-vars "REACT_APP_BACKEND_URL=$BACKEND_URL"
-  dependencies:
-    - deploy  # This makes sure the backend_url.env file from the backend deploy stage is available
-  environment:
-    name: production
-    url: https://unlimitedmarketplace-frontend.$REGION.run.app
+    - bash deploy.sh
   tags:
     - docker
   only:
